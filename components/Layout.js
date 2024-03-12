@@ -4,6 +4,8 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from '@vercel/analytics/react';
+import Sidemenu from './sidemenu'
+import Topbar from './topbar'
 
 const Layout = ({ children }) => {
   return (
@@ -15,10 +17,12 @@ const Layout = ({ children }) => {
         </Head>
         
         <main>
+            <Topbar />
+            <Sidemenu />
             {children}
             <Analytics />
         </main>
-        <footer>
+        {/* <footer>
             <a
             href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             target="_blank"
@@ -27,7 +31,7 @@ const Layout = ({ children }) => {
             Powered by{' '}
             <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
             </a>
-        </footer>
+        </footer> */}
         <style jsx>{`
             main {
                 padding: 5rem 0;
