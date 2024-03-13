@@ -1,6 +1,18 @@
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import React, { useEffect, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import { InputAdornment, TextField } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
  
 export default function Add() {
     const [name, setName] = useState('');
@@ -11,6 +23,18 @@ export default function Add() {
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [message, setMessage] = useState(undefined);
     const router = useRouter();
+
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+        margin: 20,
+      },
+    },
+  };
     
 
     useEffect(() => {
@@ -23,10 +47,28 @@ export default function Add() {
       loadTags();
   }, []);
 
-    const handleTagChange = (e) => {
-      const selectedOptions = [...e.target.options].filter(o => o.selected).map(o => o.value);
-    setSelectedTags(selectedOptions);
-    }
+  function getStyles(name, personName, theme) {
+    return {
+      fontWeight:
+        personName.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium,
+    };
+  }
+
+
+
+    const theme = useTheme();
+  
+    const handleTagChange = (event) => {
+      const {
+        target: { value },
+      } = event;
+      setSelectedTags(
+        // On autofill we get a stringified value.
+        typeof value === 'string' ? value.split(',') : value,
+      );
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,35 +89,64 @@ export default function Add() {
     <Layout>
         Add a new Transaction
         
-        <form onSubmit={handleSubmit}>
-          <input 
-            type='text'
-            placeholder='Name of the Transaction'
+          <FormControl sx={{ m: 1, width: 300 }}>
+
+            <TextField 
+            id="outlined-basic" 
+            label="Name" 
+            variant="outlined" 
+            margin="normal" 
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-          />
-          <input 
-            type='date'
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-          <select multiple onChange={handleTagChange} value={selectedTags}>
-            <option value="">Choose your Tags</option>
-            {availableTags.map(tag => (
-              <option key={tag} value={tag}>{tag}</option>
-            ))}
-          </select>
+            />
 
-          <input 
-            type='number'
-            placeholder='Amount'
-            required
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-          />{message}
-          <button type='submit'>Add</button>
-        </form>
+            <LocalizationProvider dateAdapter={AdapterDayjs} margin="normal">
+              <DemoContainer components={['DatePicker']} margin="normal" value={date} required onChange={setDate}>
+                <DatePicker label="Basic date picker" margin="normal"/>
+              </DemoContainer>
+            </LocalizationProvider>
+
+            <Select
+            labelId="demo-multiple-name-label"
+            label="Tag"
+            id="demo-multiple-name"
+            multiple
+            margin="normal"
+            value={selectedTags}
+            onChange={handleTagChange}
+            input={<OutlinedInput label="Name" />}
+            MenuProps={MenuProps}
+            >
+            {availableTags.map((tag) => (
+              <MenuItem
+                key={tag}
+                margin="normal"
+                value={tag}
+                style={getStyles(name, tag, theme)}
+              >
+                {tag}
+              </MenuItem>
+              ))}
+            </Select>
+
+            <OutlinedInput
+              id="outlined-number"
+              label="Number"
+              margin="normal"
+              type="number"
+              required
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              startAdornment={<InputAdornment position="end">$</InputAdornment>}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          
+            <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><AddIcon /></IconButton>
+          </FormControl>
+          {message}
     </Layout>
   );
 }

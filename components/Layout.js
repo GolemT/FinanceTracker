@@ -14,6 +14,7 @@ const Layout = ({ children }) => {
         <Head>
             <title>FinanceTracker</title>
             <link rel="icon" href="/favicon.ico" />
+            <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
         
         <main>

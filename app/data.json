@@ -1,16 +1,18 @@
 {
   "1": {
-    "name": "Gehalt",
-    "date": "2024-03-12",
-    "tags": "Arbeit",
-    "amount": "1300"
+    "name": "Car",
+    "date": "2024-03-13",
+    "tags": [
+      "Arbeit"
+    ],
+    "amount": "4500.00"
   },
   "2": {
-    "name": "Pizza",
+    "name": "Baloons",
     "date": "2024-03-12",
     "tags": [
-      "Essen"
+      "Freizeit"
     ],
-    "amount": "-12"
+    "amount": "-40"
   }
 }

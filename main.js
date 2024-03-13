@@ -10,6 +10,12 @@ function initializeDataFiles() {
     if (!fs.existsSync(dataPath)) {
       fs.writeFileSync(dataPath, JSON.stringify({}));
     }
+    if (!fs.existsSync(tagsPath)) {
+      fs.writeFileSync(tagsPath, JSON.stringify({
+        "Arbeit": "Transaktionen welche mit der Arbeit zu tuen haben",
+        "Essen": "Alle Transkationen für Essen und Verpflegung",
+        "Freizeit": "Transaktionen die in der Freizeit getätigt werden"}));
+    }
   }
 
 function loadData() {
@@ -75,9 +81,11 @@ function saveTag(newTag) {
       return false; // Frühe Rückkehr, da der Tag bereits existiert
     }
 
+
     // Füge den neuen Tag hinzu und speichere die aktualisierten Tags
     tags[newTag.key] = newTag.description;
     fs.writeFileSync(tagsPath, JSON.stringify(tags, null, 2));
+    console.log(tags)
     console.log(`Der Tag ${newTag.key} wurde hinzugefügt.`);
     return true; // Erfolg, Tag wurde hinzugefügt
   } catch (error) {
