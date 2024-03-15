@@ -9,10 +9,10 @@ import Select from '@mui/material/Select';
 import { InputAdornment, TextField } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs'
  
 export default function Add() {
     const [name, setName] = useState('');
@@ -20,7 +20,8 @@ export default function Add() {
     const [selectedTags, setSelectedTags] = useState([]);
     const [availableTags, setAvailableTags] = useState([]);
     // Formatiere das aktuelle Datum im YYYY-MM-DD Format für das input[type='date']
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+    // new Date().toISOString().split('T')[0]
+    const [date, setDate] = useState(dayjs());
     const [message, setMessage] = useState(undefined);
     const router = useRouter();
 
@@ -89,7 +90,7 @@ export default function Add() {
     <Layout>
         Add a new Transaction
         
-          <FormControl sx={{ m: 1, width: 300 }}>
+          <FormControl sx={{ m: 1, width: '100%', '& > :not(style)': { m:1 }, display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 2 }}>
 
             <TextField 
             id="outlined-basic" 
@@ -101,10 +102,15 @@ export default function Add() {
             onChange={(e) => setName(e.target.value)}
             />
 
-            <LocalizationProvider dateAdapter={AdapterDayjs} margin="normal">
-              <DemoContainer components={['DatePicker']} margin="normal" value={date} required onChange={setDate}>
-                <DatePicker label="Basic date picker" margin="normal"/>
-              </DemoContainer>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker 
+                  label="Transaction Date"
+                  value={date}
+                  onChange={(newValue) => {
+                    setDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} margin='normal' required />}
+                  />
             </LocalizationProvider>
 
             <Select
@@ -138,15 +144,14 @@ export default function Add() {
               required
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              startAdornment={<InputAdornment position="end">$</InputAdornment>}
+              endAdornment={<InputAdornment position="end">$*</InputAdornment>}
               InputLabelProps={{
                 shrink: true,
               }}
             />
-          
+            {message}
             <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><AddIcon /></IconButton>
           </FormControl>
-          {message}
     </Layout>
   );
 }
