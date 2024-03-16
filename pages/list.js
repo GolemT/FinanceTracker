@@ -1,10 +1,13 @@
-import Link from 'next/Link';
 import Layout from '../components/Layout';
 import React, {useEffect, useState} from 'react'
 import { DataGrid } from '@mui/x-data-grid';
+import styles from '../styles/main.module.css'
+import { useRouter } from 'next/router'
+import IconButton from '@mui/material/IconButton';
  
 export default function Home() {
   const [data, setData] = useState([]);
+  const router = useRouter();
   
 
     useEffect(() => {
@@ -29,18 +32,24 @@ export default function Home() {
       { field: 'tags', headerName: 'Tags', width: 300 },
       { field: 'amount', headerName: 'Amount', width: 300 },
     ];
+
+    const add = () => {
+      router.push('/add')
+  }
+
   
   return (
     <Layout>
-        This is the list view
-        <div style={{ height: '80%', width: '66%' }}>
+        <content className={styles.content}>
+          <div style={{ height: '80%', width: '66%' }}>
             <DataGrid
-                rows={data}
-                columns={columns}
-                pageSize={10}
+              rows={data}
+              columns={columns}
+              pageSize={10}
             />
-        </div>
-        <Link href="/add">Add</Link>
+          </div>
+          <IconButton aria-label="add" size="large" color="primary" onClick={add} className={styles.icon}><img src="/Add_button.png"/></IconButton>
+        </content>
     </Layout>
   );
 }

@@ -6,13 +6,13 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { InputAdornment, TextField } from '@mui/material';
+import { InputAdornment, InputLabel, TextField } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs'
+import styles from '../styles/main.module.css'
  
 export default function Add() {
     const [name, setName] = useState('');
@@ -84,74 +84,74 @@ export default function Add() {
     }
   };
 
-  
-
   return (
     <Layout>
-        Add a new Transaction
+      <content className={styles.content}>
+        <h3>Add a new Transaction</h3>
         
-          <FormControl sx={{ m: 1, width: '100%', '& > :not(style)': { m:1 }, display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 2 }}>
+        <FormControl margin="normal" sx={{ m: 1, width: '100%', '& > :not(style)': { m:1 }, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
 
-            <TextField 
-            id="outlined-basic" 
-            label="Name" 
-            variant="outlined" 
-            margin="normal" 
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            />
+          <TextField 
+          id="outlined-basic" 
+          label="Name" 
+          variant="outlined" 
+          margin="normal" 
+          required
+          sx={{ minWidth: 300 }}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          />
 
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker 
-                  label="Transaction Date"
-                  value={date}
-                  onChange={(newValue) => {
-                    setDate(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} margin='normal' required />}
-                  />
-            </LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker 
+                label="Transaction Date"
+                value={date}
+                sx={{ minWidth: 300 }}
+                onChange={(newValue) => {
+                  setDate(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} margin='normal' required />}
+                />
+          </LocalizationProvider>
 
+          <FormControl sx={{ minWidth: 300, margin: 'normal' }}>
+            <InputLabel id="tags-label">Tags (Optional)</InputLabel>
             <Select
-            labelId="demo-multiple-name-label"
-            label="Tag"
-            id="demo-multiple-name"
-            multiple
-            margin="normal"
-            value={selectedTags}
-            onChange={handleTagChange}
-            input={<OutlinedInput label="Name" />}
-            MenuProps={MenuProps}
+              labelId="tags-label"
+              id="tags-select"
+              multiple
+              value={selectedTags}
+              onChange={handleTagChange}
+              input={<OutlinedInput label="Tag" />}
+              MenuProps={MenuProps}
             >
             {availableTags.map((tag) => (
-              <MenuItem
-                key={tag}
-                margin="normal"
-                value={tag}
-                style={getStyles(name, tag, theme)}
-              >
+              <MenuItem key={tag} value={tag} style={getStyles(tag, selectedTags, theme)}>
                 {tag}
               </MenuItem>
-              ))}
+            ))}
             </Select>
-
-            <OutlinedInput
-              id="outlined-number"
-              label="Number"
-              margin="normal"
-              type="number"
-              required
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              endAdornment={<InputAdornment position="end">$*</InputAdornment>}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            {message}
-            <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><AddIcon /></IconButton>
           </FormControl>
+
+          <TextField
+          id="outlined-number"
+          label="Amount"
+          type="number"
+          required
+          value={amount}
+          sx={{ minWidth: 300 }}
+          onChange={(e) => setAmount(e.target.value)}
+          InputProps={{
+            endAdornment: <InputAdornment position="end">$</InputAdornment>,
+          }}
+          margin="normal"
+          variant="outlined"
+        />
+
+          {message}
+          <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.png"/></IconButton>
+        </FormControl>
+      </content>
     </Layout>
   );
 }

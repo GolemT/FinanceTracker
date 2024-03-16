@@ -1,11 +1,14 @@
 import Layout from "../components/Layout";
-import Link from 'next/Link';
 import React, {useState, useEffect} from "react";
 import { DataGrid } from '@mui/x-data-grid';
+import styles from '../styles/main.module.css';
+import { useRouter } from 'next/router';
+import IconButton from '@mui/material/IconButton';
 
 
 export default function tags () {
     const [tags, setTags] = useState({});
+    const router = useRouter();
 
     useEffect(() => {
       const fetchTags = async () => {
@@ -23,21 +26,26 @@ export default function tags () {
   }, []);
 
   const columns = [
-    { field: 'tag', headerName: 'Tag', width: 300 },
-    { field: 'description', headerName: 'Description', width: 300 },
+    { field: 'tag', headerName: 'Tag', width: 250 },
+    { field: 'description', headerName: 'Description', width: 600 },
   ];
+
+    const addTag = () => {
+        router.push('/addTags')
+    }
 
     return (
         <Layout>
-        This is the Tags Page
-        <div style={{ height: '80%', width: '66%' }}>
-            <DataGrid
-                rows={tags}
-                columns={columns}
-                pageSize={1}
-            />
-        </div>
-        <Link href="/addTags">Add</Link>
+            <content className={styles.content}>
+                <div style={{ height: '80%', width: '66%' }}>
+                    <DataGrid
+                        rows={tags}
+                        columns={columns}
+                        pageSize={1}
+                    />
+                </div>
+                <IconButton aria-label="add" size="large" color="primary" onClick={addTag} className={styles.icon}><img src="/Add_button.png"/></IconButton>
+            </content>
     </Layout>
     )
 }

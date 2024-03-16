@@ -3,12 +3,13 @@ import Layout from '../components/Layout';
 import { useRouter } from 'next/router';
 import { FormControl, TextField, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import styles from '../styles/main.module.css'
 
 export default function addTags () {
     const [name, setName] = useState(undefined);
     const [description, setDescription] = useState('');
     const [message, setMessage] = useState(undefined);
-    const router = useRouter()
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -32,32 +33,33 @@ export default function addTags () {
     
     return (
         <Layout>
-        Add a new Tag
+          <content className={styles.content}>
+            <h3>Add a new Tag</h3>
+            <h4 className={styles.warning}>{message}</h4>
+            <FormControl sx={{ m: 1, width: 300 }}>
 
-          <FormControl sx={{ m: 1, width: 300 }}>
+              <TextField 
+              id="outlined-basic" 
+              label="Name" 
+              variant="outlined" 
+              margin="normal" 
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              />
 
-            <TextField 
-            id="outlined-basic" 
-            label="Name" 
-            variant="outlined" 
-            margin="normal" 
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            />
+              <TextField 
+              id="outlined-basic" 
+              label="Description"
+              variant="outlined" 
+              margin="normal" 
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              />
 
-            <TextField 
-            id="outlined-basic" 
-            label="Description"
-            variant="outlined" 
-            margin="normal" 
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            />
-
-            <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><AddIcon /></IconButton>
-          </FormControl>
-          {message}
+              <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.png"/></IconButton>
+            </FormControl>
+          </content>
         </Layout>
     )
 }

@@ -1,14 +1,40 @@
 import Link from 'next/Link'
+import styles from '../styles/layout.module.css'
+import { useRouter } from 'next/router';
 
 export default function sidemenu() {
+    const router = useRouter()
+
+     const getLinkStyle = (href) => {
+        return router.pathname === href ? { color: '#623CEA', opacity: 1 } : {};
+    };
+
     return (
-        <aside>
-            <h1>FinanceTracker</h1>
-                    <Link href="/" >Dashboard</Link>
-                    <Link href="/list">List</Link>
-                    <Link href="/goals">Goals</Link>
-                    <Link href="/tags">Tags</Link>
-            <Link href="/support">Support</Link>
+        <aside className={styles.sidemenu}>
+            <span className={styles.title} onClick={() => router.push('/')}>
+                <img src="/logo_png.png" />
+                <h1>FinanceTracker</h1>
+            </span>
+            
+            <nav className={styles.nav}>    
+            <Link href="/" passHref className={styles.Link}>
+                    <span style={getLinkStyle('/')}>Dashboard</span>
+                </Link>
+                <Link href="/list" passHref className={styles.Link}>
+                    <span style={getLinkStyle('/list')}>List</span>
+                </Link>
+                <Link href="/goals" passHref className={styles.Link}>
+                    <span style={getLinkStyle('/goals')}>Goals</span>
+                </Link>
+                <Link href="/tags" passHref className={styles.Link}>
+                    <span style={getLinkStyle('/tags')}>Tags</span>
+                </Link>
+            </nav>
+            <span className={styles.support}>
+            <Link href="/support" passHref className={styles.Link}>
+                    <span style={getLinkStyle('/support')}>Support</span>
+                </Link>
+            </span>
         </aside>
     )
 }
