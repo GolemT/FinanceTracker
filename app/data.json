@@ -13,6 +13,72 @@
     "tags": [
       "Freizeit"
     ],
-    "amount": "-40"
+    "amount": "-40.00"
+  },
+  "3": {
+    "name": "Laptop",
+    "date": "2024-04-01",
+    "tags": [
+      "Arbeit",
+      "Elektronik"
+    ],
+    "amount": "1200.00"
+  },
+  "4": {
+    "name": "Books",
+    "date": "2024-04-03",
+    "tags": [
+      "Bildung"
+    ],
+    "amount": "-150.00"
+  },
+  "5": {
+    "name": "Groceries",
+    "date": "2024-04-05",
+    "tags": [
+      "Haushalt"
+    ],
+    "amount": "-300.00"
+  },
+  "6": {
+    "name": "Gym Membership",
+    "date": "2024-04-10",
+    "tags": [
+      "Gesundheit"
+    ],
+    "amount": "-50.00"
+  },
+  "7": {
+    "name": "Concert Tickets",
+    "date": "2024-05-15",
+    "tags": [
+      "Unterhaltung",
+      "Musik"
+    ],
+    "amount": "-120.00"
+  },
+  "8": {
+    "name": "Vacation Savings",
+    "date": "2024-06-01",
+    "tags": [
+      "Reisen"
+    ],
+    "amount": "5000.00"
+  },
+  "9": {
+    "name": "Phone Bill",
+    "date": "2024-04-20",
+    "tags": [
+      "Rechnungen"
+    ],
+    "amount": "-60.00"
+  },
+  "10": {
+    "name": "Charity Donation",
+    "date": "2024-07-02",
+    "tags": [
+      "Wohltätigkeit"
+    ],
+    "amount": "-100.00"
   }
 }
