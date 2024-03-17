@@ -1,5 +1,5 @@
 # FinanceTracker
-
+![AppName](./public/AppName.png)
 ## Description
 
 Dieses Project bildet eine Desktop Anwendung welche bei der Verfolgung von Einnahmen und Ausgaben helfen soll. Des Weiteren bring sie dem User eine visuelle Darstellung in Form von Graphen.
