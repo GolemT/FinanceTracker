@@ -73,14 +73,19 @@ export default function Add() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if ( name === '' || amount === '') {
+          console.log("No Name given")
+          setMessage("Required Fields were not filled");
+          return;
+        }
         // Hier könntest du die Daten an den Hauptprozess von Electron senden oder in den Zustand deiner Anwendung speichern
         const success = await window.electron.saveData({ name, date, tags: selectedTags, amount });
     // Überprüfe, ob die Speicherung erfolgreich war, bevor du navigierst
     if (success) {
         router.push('/list');
     } else {
-        // Handle Fehlerfall
-        setMessage('Error while saving');
+      // Handle Fehlerfall
+      setMessage('Error while saving');
     }
   };
 
@@ -88,7 +93,7 @@ export default function Add() {
     <Layout>
       <content className={styles.content}>
         <h3>Add a new Transaction</h3>
-        
+        <h4 className={styles.warning}>{message}</h4>
         <FormControl margin="normal" sx={{ m: 1, width: '100%', '& > :not(style)': { m:1 }, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
 
           <TextField 
@@ -147,8 +152,6 @@ export default function Add() {
           margin="normal"
           variant="outlined"
         />
-
-          {message}
           <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.png"/></IconButton>
         </FormControl>
       </content>
