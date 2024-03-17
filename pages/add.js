@@ -78,8 +78,10 @@ export default function Add() {
           setMessage("Required Fields were not filled");
           return;
         }
+
+        const formattedDate = date.format('YYYY-MM-DD');
         // Hier könntest du die Daten an den Hauptprozess von Electron senden oder in den Zustand deiner Anwendung speichern
-        const success = await window.electron.saveData({ name, date, tags: selectedTags, amount });
+        const success = await window.electron.saveData({ name, date: formattedDate, tags: selectedTags, amount });
     // Überprüfe, ob die Speicherung erfolgreich war, bevor du navigierst
     if (success) {
         router.push('/list');

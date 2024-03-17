@@ -70,6 +70,22 @@ function saveData(newData) {
   }
 }
 
+function deleteData(idsToDelete) {
+  try {
+    const data = loadData();
+    idsToDelete.forEach(id => {
+      if (data.hasOwnProperty(id)) {
+        delete data[id];
+      }
+    });
+    fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
+    return true;
+  } catch (error) {
+    console.error('Fehler beim Löschen der Daten:', error);
+    return false;
+  }
+}
+
 function saveTag(newTag) {
   try {
     const tagsData = fs.existsSync(tagsPath) ? fs.readFileSync(tagsPath, 'utf8') : '{}';
@@ -94,6 +110,22 @@ function saveTag(newTag) {
   }
 }
 
+function deleteTag(tagsToDelete) {
+  try {
+    const tags = loadTags();
+    tagsToDelete.forEach(key => {
+      if (tags.hasOwnProperty(key)) {
+        delete tags[key];
+      }
+    });
+    fs.writeFileSync(tagsPath, JSON.stringify(tags, null, 2));
+    return true;
+  } catch (error) {
+    console.error('Fehler beim Löschen der Tags:', error);
+    return false;
+  }
+}
+
 
 ipcMain.handle('load-data', (event) => {
     return loadData();
@@ -113,11 +145,21 @@ ipcMain.handle('save-tag', (event, newTag) => {
   return success;
 });
 
+ipcMain.handle('delete-data', (event, idsToDelete) => {
+  return deleteData(idsToDelete);
+});
+
+ipcMain.handle('delete-tag', (event, tagsToDelete) => {
+  return deleteTag(tagsToDelete);
+});
+
+
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    icon: path.join(__dirname, './public/logo.png'),
     webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: false,
@@ -130,6 +172,7 @@ function createWindow() {
   // Für die Entwicklung: http://localhost:3000
   // Für die Produktion: file://${__dirname}/out/index.html, nachdem du `next build` und `next export` ausgeführt hast
   win.loadURL('http://localhost:3000');
+  win.maximize();
 }
 
 app.whenReady().then(() => {

@@ -4,33 +4,38 @@ import { DataGrid } from '@mui/x-data-grid';
 import styles from '../styles/main.module.css'
 import { useRouter } from 'next/router'
 import IconButton from '@mui/material/IconButton';
+import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
  
 export default function Home() {
   const [data, setData] = useState([]);
   const router = useRouter();
   const [selectedRows, setSelectedRows] = useState([]);
 
-    const handleDelete = () => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // Kann 'success', 'error', 'warning', 'info' sein
+  const [dialogOpen, setDialogOpen] = useState(false);
 
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
     }
+    setSnackbarOpen(false);
+  };
 
-    const handleEdit = () => {
-
-    }
+  const fetchData = async () => {
+    const loadedData = await window.electron.loadData();
+    const dataArray = Object.entries(loadedData).map(([id, item]) => ({
+      id: id, // Use the key as the id
+      name: item.name,
+      date: item.date,
+      tags: item.tags.join(", "), // Assuming tags is an array, join them for display
+      amount: item.amount
+  }));
+    setData(dataArray);
+  };
 
     useEffect(() => {
-        const fetchData = async () => {
-            const loadedData = await window.electron.loadData();
-            const dataArray = Object.entries(loadedData).map(([id, item]) => ({
-              id: id, // Use the key as the id
-              name: item.name,
-              date: item.date,
-              tags: item.tags.join(", "), // Assuming tags is an array, join them for display
-              amount: item.amount
-          }));
-            setData(dataArray);
-        };
-
         fetchData();
     }, []);
 
@@ -61,6 +66,25 @@ export default function Home() {
   }
 
   const animationClass = selectedRows.length > 0 ? styles.animateButtons : styles.none;
+
+  const handleDeleteConfirm = async () => {
+      const idsToDelete = selectedRows;
+      const success = await window.electron.deleteData(idsToDelete)
+      if(success) {
+        fetchData();
+        setSnackbarMessage('Data was deleted successfully.');
+        setSnackbarSeverity('success');
+      } else {
+        setSnackbarMessage('Fehler beim Löschen der Daten.');
+        setSnackbarSeverity('error');
+      }
+      setDialogOpen(false);
+      setSnackbarOpen(true);
+      }
+
+    const handleDelete = () => {
+      setDialogOpen(true);
+    }
   
   return (
     <Layout>
@@ -89,9 +113,6 @@ export default function Home() {
                 <IconButton aria-label="delete" size="medium" color="secondary" onClick={handleDelete}>
                   <img src="/delete.png"/>
                 </IconButton>
-                <IconButton aria-label="edit" size="medium" color="primary" onClick={handleEdit}>
-                  <img src="/edit.png"/>
-                </IconButton>
               </>
             )}
           </div>
@@ -99,6 +120,32 @@ export default function Home() {
               <img src="/Add_button.png"/>
               </IconButton>
           </div>
+          <Dialog
+            open={dialogOpen}
+            onClose={() => setDialogOpen(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Confirm Deletion"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Are you sure you want to delete the selected entries?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setDialogOpen(false)}>No</Button>
+              <Button onClick={handleDeleteConfirm} autoFocus>
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+          <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+            {snackbarMessage}
+          </Alert>
+          </Snackbar>
         </content>
     </Layout>
   );
