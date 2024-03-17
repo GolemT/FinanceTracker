@@ -8,7 +8,15 @@ import IconButton from '@mui/material/IconButton';
 export default function Home() {
   const [data, setData] = useState([]);
   const router = useRouter();
-  
+  const [selectedRows, setSelectedRows] = useState([]);
+
+    const handleDelete = () => {
+
+    }
+
+    const handleEdit = () => {
+
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,28 +35,70 @@ export default function Home() {
     }, []);
 
     const columns = [
-      { field: 'name', headerName: 'Name', width: 300 },
-      { field: 'date', headerName: 'Date', width: 300 },
+      { field: 'name', headerName: 'Name', width: 400 },
+      { field: 'date', headerName: 'Date', width: 200 },
       { field: 'tags', headerName: 'Tags', width: 300 },
-      { field: 'amount', headerName: 'Amount', width: 300 },
+      { 
+        field: 'amount',
+        headerName: 'Amount',
+        width: 150,
+        align: 'right',
+        headerAlign: 'right',
+        renderCell: (params) => {
+          return (
+            <span style={{ 
+              color: params.value >=0 ? '#20BF55' : '#DB3A34',
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}>{`${params.value} €`}</span>
+          )
+        }
+      }
     ];
 
     const add = () => {
       router.push('/add')
   }
 
+  const animationClass = selectedRows.length > 0 ? styles.animateButtons : styles.none;
   
   return (
     <Layout>
         <content className={styles.content}>
-          <div style={{ height: '80%', width: '66%' }}>
+          <div style={{ height: '90%', width: '75%' }}>
             <DataGrid
               rows={data}
               columns={columns}
               pageSize={10}
+              checkboxSelection
+              sortModel={[
+                {
+                  field: 'date',
+                  sort: 'desc',
+                },
+              ]}
+              onRowSelectionModelChange={(newSelection) => {
+                setSelectedRows(newSelection)
+              }}
             />
           </div>
-          <IconButton aria-label="add" size="large" color="primary" onClick={add} className={styles.icon}><img src="/Add_button.png"/></IconButton>
+          <div className={styles.buttons}>
+          <div className={animationClass}>
+            {selectedRows.length > 0 && (
+              <>
+                <IconButton aria-label="delete" size="medium" color="secondary" onClick={handleDelete}>
+                  <img src="/delete.png"/>
+                </IconButton>
+                <IconButton aria-label="edit" size="medium" color="primary" onClick={handleEdit}>
+                  <img src="/edit.png"/>
+                </IconButton>
+              </>
+            )}
+          </div>
+            <IconButton aria-label="add" size="medium" color="primary" onClick={add} className={styles.icon}>
+              <img src="/Add_button.png"/>
+              </IconButton>
+          </div>
         </content>
     </Layout>
   );

@@ -142,7 +142,7 @@ export default function Add() {
           sx={{ minWidth: 300 }}
           onChange={(e) => setAmount(e.target.value)}
           InputProps={{
-            endAdornment: <InputAdornment position="end">$</InputAdornment>,
+            endAdornment: <InputAdornment position="end">€</InputAdornment>,
           }}
           margin="normal"
           variant="outlined"

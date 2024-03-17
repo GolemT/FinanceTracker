@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 export default function tags () {
     const [tags, setTags] = useState({});
     const router = useRouter();
+    const [selectedRows, setSelectedRows] = useState([]);
 
     useEffect(() => {
       const fetchTags = async () => {
@@ -30,8 +31,18 @@ export default function tags () {
     { field: 'description', headerName: 'Description', width: 600 },
   ];
 
+  const animationClass = selectedRows.length > 0 ? styles.animateButtons : styles.none;
+
     const addTag = () => {
         router.push('/addTags')
+    }
+
+    const handleDelete = () => {
+
+    }
+
+    const handleEdit = () => {
+
     }
 
     return (
@@ -42,9 +53,29 @@ export default function tags () {
                         rows={tags}
                         columns={columns}
                         pageSize={1}
+                        checkboxSelection
+                        onRowSelectionModelChange={(newSelection) => {
+                            setSelectedRows(newSelection)
+                          }}
                     />
                 </div>
-                <IconButton aria-label="add" size="large" color="primary" onClick={addTag} className={styles.icon}><img src="/Add_button.png"/></IconButton>
+                <div className={styles.buttons}>
+                    <div className={animationClass}>
+                        {selectedRows.length > 0 && (
+                        <>
+                            <IconButton aria-label="delete" size="medium" color="secondary" onClick={handleDelete}>
+                            <img src="/delete.png"/>
+                            </IconButton>
+                            <IconButton aria-label="edit" size="medium" color="primary" onClick={handleEdit}>
+                            <img src="/edit.png"/>
+                            </IconButton>
+                        </>
+                        )}
+                    </div>
+                    <IconButton aria-label="add" size="medium" color="primary" onClick={addTag} className={styles.icon}>
+                    <img src="/Add_button.png"/>
+                    </IconButton>
+                </div>
             </content>
     </Layout>
     )
