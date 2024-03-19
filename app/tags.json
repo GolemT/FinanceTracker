@@ -1,5 +1,14 @@
 {
-  "Arbeit": "Transaktionen welche mit der Arbeit zu tuen haben",
-  "Essen": "Alle Transkationen für Essen und Verpflegung",
-  "Freizeit": "Transaktionen die in der Freizeit getätigt werden"
+  "Arbeit": "Transaktionen, die mit der Arbeit zu tun haben",
+  "Essen": "Alle Transaktionen für Essen und Verpflegung",
+  "Freizeit": "Transaktionen, die in der Freizeit getätigt werden",
+  "Elektronik": "Käufe von elektronischen Geräten oder Zubehör",
+  "Bildung": "Ausgaben für Bildungsmaterialien wie Bücher",
+  "Haushalt": "Ausgaben für den täglichen Bedarf und Haushaltsgegenstände",
+  "Gesundheit": "Ausgaben für gesundheitliche Zwecke, wie z.B. Fitnessstudio-Mitgliedschaften",
+  "Unterhaltung": "Ausgaben für Aktivitäten zur Unterhaltung, wie z.B. Konzerttickets",
+  "Musik": "Spezifische Ausgaben für musikalische Aktivitäten oder Produkte",
+  "Reisen": "Ausgaben im Zusammenhang mit Reisen",
+  "Rechnungen": "Monatliche Rechnungen, wie z.B. Telefonrechnungen",
+  "Wohltätigkeit": "Spenden an Wohltätigkeitsorganisationen oder gemeinnützige Zwecke"
 }

@@ -14,6 +14,21 @@
     align-items: center;
 }
 
+.grid {
+    display: flex;
+    position: absolute;
+    margin: 20px 20px 20px 200px;
+    padding: 20px;
+    height: fill;
+    width: fill;
+    gap: 40px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
 .buttons {
     z-index: 1000;
     position: fixed;
@@ -35,6 +50,22 @@
 
 .none {
     display: none;
+}
+
+.card {
+    display: flex;
+    padding: 10px;
+    border: 1px solid #3185FC;
+    border-radius: 36px;
+    box-shadow: 10px 10px 10px #3185FC;
+    height: 450px;
+    color: #070707;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card:first-child{
+    width: 700px;
 }
 
 /* Animation für das Erscheinen */
