@@ -1,18 +1,21 @@
-.header {
+.header, .sidemenu {
     position: fixed;
     display: flex;
     top: 0;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+.header {
+    background-color: #FFFFFF;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0,5);
     right: 0;
     width: 75%;
     height: 10%;
     border-bottom: 3px solid grey;
     font-size: 18px;
     padding: 10px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0,5);
-    background-color: #FFFFFF;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
 }
 
 .header img:hover{
@@ -20,13 +23,10 @@
 }
 
 .sidemenu {
-    position: fixed;
     left: 0;
     flex-direction: column;
-    top: 0;
     background-color: #070707;
     color: #FAFAFA;
-    display: flex;
     height: 100%;
     width: 25%;
     justify-content: space-between;
@@ -62,7 +62,7 @@
 .Link {
     color: #FAFAFA;
     opacity: 100%;
-    font-size: 35px;
+    font-size: 2rem;
     width: 100%;
     text-align: center;
     text-decoration: none;
@@ -79,4 +79,24 @@
 
 .support {
     padding-bottom: 32px;
+}
+
+/* Für größere Bildschirme (z.B. über 24 Zoll) */
+@media screen and (min-width: 1920px) {
+    .sidemenu {
+        width: 15%; /* Verkleinern der Seitenleiste für größere Bildschirme */
+    }
+    .content {
+        margin-left: 20%; /* Anpassung des linken Rands */
+    }
+}
+
+/* Für kleinere Bildschirme (z.B. unter 24 Zoll) */
+@media screen and (max-width: 1920px) {
+    .sidemenu {
+        width: 25%; /* Vergrößern der Seitenleiste für kleinere Bildschirme */
+    }
+    .content {
+        margin-left: 30%; /* Anpassung des linken Rands */
+    }
 }

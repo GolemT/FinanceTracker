@@ -54,6 +54,7 @@
 
 .card {
     display: flex;
+    flex-wrap: wrap;
     padding: 10px;
     border: 1px solid #3185FC;
     border-radius: 36px;

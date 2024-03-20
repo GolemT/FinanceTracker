@@ -12,8 +12,7 @@ export default function sidemenu() {
     return (
         <aside className={styles.sidemenu}>
             <span className={styles.title} onClick={() => router.push('/')}>
-                <img src="/logo_png.png" />
-                <h1>FinanceTracker</h1>
+                <img src="/AppName.png" />
             </span>
             
             <nav className={styles.nav}>    

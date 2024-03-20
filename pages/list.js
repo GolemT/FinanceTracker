@@ -40,7 +40,7 @@ export default function Home() {
     }, []);
 
     const columns = [
-      { field: 'name', headerName: 'Name', width: 400 },
+      { field: 'name', headerName: 'Name', width: 300 },
       { field: 'date', headerName: 'Date', width: 200 },
       { field: 'tags', headerName: 'Tags', width: 300 },
       { 
@@ -89,7 +89,7 @@ export default function Home() {
   return (
     <Layout>
         <content className={styles.content}>
-          <div style={{ height: '90%', width: '75%' }}>
+          <div style={{ height: '90%', width: '80%' }}>
             <DataGrid
               rows={data}
               columns={columns}
