@@ -9,11 +9,11 @@ export default function Home() {
       <content className={styles.content}>
         <cards className={styles.grid}>
           <div className={styles.card}>
-            <h5>Overview</h5>
+            <h3>Overview</h3>
             <StockChart />
           </div>
           <div className={styles.card}>
-            <h5>Based on Tags</h5>
+            <h3>Based on Tags</h3>
             <PieChart />
           </div>
         </cards> 

@@ -1,5 +1,5 @@
 .content {
-    background-color: #FAFAFAFA;
+    background-color: #efefef;
     right: 0;
     bottom: 0;
     top: 6rem;
@@ -10,6 +10,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: #070707;
 }
 
 .grid {
@@ -52,12 +53,14 @@
 .card {
     display: flex;
     flex-wrap: wrap;
+    font-size: 1rem;
     padding: 10px;
-    border: 1px solid #3185FC;
+    border: 1px solid #FFFFFF;
     border-radius: 36px;
-    box-shadow: 10px 10px 10px #3185FC;
+    /* box-shadow: 10px 10px 10px #3185FC; */
     height: 450px;
     color: #070707;
+    background-color: #FFFFFF;
     flex-direction: column;
     align-items: center;
 }
