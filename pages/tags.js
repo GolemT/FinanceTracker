@@ -72,7 +72,7 @@ export default function tags () {
     return (
         <Layout>
             <content className={styles.content}>
-                <div style={{ height: '80%', width: '66%' }}>
+                <div style={{ height: '100%', width: '100%' }}>
                     <DataGrid
                         rows={tags}
                         columns={columns}
