@@ -1,38 +1,50 @@
-# FinanceTracker
 ![AppName](./public/AppName.png)
+
+
 ## Description
 
 Dieses Project bildet eine Desktop Anwendung welche bei der Verfolgung von Einnahmen und Ausgaben helfen soll. Des Weiteren bring sie dem User eine visuelle Darstellung in Form von Graphen.
 
+
 ## Technologies
+
+
 ### Programming
 
 Die Anwendung läuft auf dem Javascript Framework NextJS in Verbindung mit der React library. Sowohl Frontend als auch Backend sind mit Javascript geschrieben und nutzen libraries für diese Sprache. Um die Anwendung als native Anwendung laufen zu lassen wird electron verwendet.
+
 
 ### Database
 
 Daten werden local in einer JSON gespeichert, sodass jeder Nutzer für seine eigenen Daten verantwortlich ist. Die Anwendung selbst stellt keine Verbindung zu anderen Systemen her.
 
+
 ### Datastructure:
+
+Transaktion:
 
     name : String
     date: Date
     tag: [String Array]
     amount: Number
 
-### Testing
+Tag:
 
-Zum Testen der Funktionalität der Anwendung wird das Testframework Playwright benutzt. Tests werden in Typescript geschrieben und automatisch ausgeführt sobald ein neuer Commit gepusht wird.
+    name: String
+    description: String
 
-## How to Setup/Run
+
+## Setup/Run
 
 Um die Anwendung zu starten wird Node.JS und der Paketmanager npm benötigt. Es wird außerdem eine IDE wie Visuall Studio Code empfohlen.
+
 
 ### Initialisieren der Anwendung
 
 Um die benötigten Packages zu installieren wird der paketmanager npm genutzt. in einem Terminal den folgendenen Befehl eingeben um alle dependencies zu ziehen.
 
     npm install
+
 
 ### Run
 
@@ -44,9 +56,11 @@ Dadurch wird Next.js gestartet. Um die Anwendung allerdings zu nutzen wird noch 
 
     npm run electron
 
-## How to Use
+
+## Use
 
 Bei release wird ein Package als Desktop Anwendung verfügbar sein. Weitere Releases werden über andere Kanäle erfolgen.
+
 
 ## License
 
