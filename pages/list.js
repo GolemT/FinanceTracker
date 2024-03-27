@@ -40,9 +40,9 @@ export default function Home() {
     }, []);
 
     const columns = [
-      { field: 'name', headerName: 'Name', width: 400 },
-      { field: 'date', headerName: 'Date', width: 400 },
-      { field: 'tags', headerName: 'Tags', width: 400 },
+      { field: 'name', headerName: 'Name', flex: 1 },
+      { field: 'date', headerName: 'Date', flex: 1 },
+      { field: 'tags', headerName: 'Tags', flex: 2 },
       { 
         field: 'amount',
         headerName: 'Amount',

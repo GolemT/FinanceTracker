@@ -39,8 +39,8 @@ export default function tags () {
   }, []);
 
   const columns = [
-    { field: 'tag', headerName: 'Tag', width: 250 },
-    { field: 'description', headerName: 'Description', width: 600 },
+    { field: 'tag', headerName: 'Tag', flex: 1 },
+    { field: 'description', headerName: 'Description', flex: 3 },
   ];
 
   const animationClass = selectedTagKeys.length > 0 ? styles.animateButtons : styles.none;
