@@ -18,6 +18,11 @@
     padding: 10px;
 }
 
+.title img {
+    max-width: 100%;
+    height: auto;
+}
+
 .header img:hover{
     cursor: pointer;
 }
@@ -41,6 +46,7 @@
     justify-content: center;
     padding-top: 10px;
     margin-right: 20px;
+    width: 100%;
 }
 
 .title h1 {

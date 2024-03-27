@@ -2,8 +2,6 @@
     background-color: #efefef;
     right: 0;
     bottom: 0;
-    top: 6rem;
-    left: 30rem;
     position: absolute;
     overflow: auto;
     display: flex;
@@ -11,14 +9,16 @@
     justify-content: center;
     align-items: center;
     color: #070707;
+    width: 75%;
+    height: 90%;
 }
 
 .grid {
     display: flex;
     position: absolute;
     padding: 20px;
-    height: fill;
-    width: fill;
+    height: stretch;
+    width: stretch;
     gap: 5rem;
     flex-direction: row;
     flex-wrap: wrap;
