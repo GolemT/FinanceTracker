@@ -22,9 +22,9 @@ export default function sidemenu() {
                 <Link href="/list" passHref className={styles.Link}>
                     <span style={getLinkStyle('/list')}>List</span>
                 </Link>
-                <Link href="/goals" passHref className={styles.Link}>
+                {/* <Link href="/goals" passHref className={styles.Link}>
                     <span style={getLinkStyle('/goals')}>Goals</span>
-                </Link>
+                </Link> */}
                 <Link href="/tags" passHref className={styles.Link}>
                     <span style={getLinkStyle('/tags')}>Tags</span>
                 </Link>

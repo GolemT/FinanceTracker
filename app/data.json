@@ -16,69 +16,83 @@
     "amount": "-40.00"
   },
   "3": {
-    "name": "Laptop",
+    "name": "Health Insurance",
     "date": "2024-04-01",
     "tags": [
-      "Arbeit",
-      "Elektronik"
-    ],
-    "amount": "1200.00"
-  },
-  "4": {
-    "name": "Books",
-    "date": "2024-04-03",
-    "tags": [
-      "Bildung"
+      "Versicherungen"
     ],
     "amount": "-150.00"
   },
+  "4": {
+    "name": "Online Course on Data Science",
+    "date": "2024-04-15",
+    "tags": [
+      "Bildung"
+    ],
+    "amount": "-200.00"
+  },
   "5": {
-    "name": "Groceries",
-    "date": "2024-04-05",
-    "tags": [
-      "Haushalt"
-    ],
-    "amount": "-300.00"
-  },
-  "6": {
-    "name": "Gym Membership",
-    "date": "2024-04-10",
-    "tags": [
-      "Gesundheit"
-    ],
-    "amount": "-50.00"
-  },
-  "7": {
-    "name": "Concert Tickets",
-    "date": "2024-05-15",
-    "tags": [
-      "Unterhaltung",
-      "Musik"
-    ],
-    "amount": "-120.00"
-  },
-  "8": {
-    "name": "Vacation Savings",
-    "date": "2024-06-01",
+    "name": "Family Vacation to Italy",
+    "date": "2024-05-20",
     "tags": [
       "Reisen"
     ],
-    "amount": "5000.00"
+    "amount": "-3000.00"
+  },
+  "6": {
+    "name": "New Laptop",
+    "date": "2024-06-05",
+    "tags": [
+      "Technologie"
+    ],
+    "amount": "-1200.00"
+  },
+  "7": {
+    "name": "Gym Membership",
+    "date": "2024-06-18",
+    "tags": [
+      "Gesundheit"
+    ],
+    "amount": "-300.00"
+  },
+  "8": {
+    "name": "Winter Coat",
+    "date": "2024-07-03",
+    "tags": [
+      "Kleidung"
+    ],
+    "amount": "-150.00"
   },
   "9": {
-    "name": "Phone Bill",
-    "date": "2024-04-20",
+    "name": "Concert Tickets",
+    "date": "2024-07-22",
     "tags": [
-      "Rechnungen"
+      "Unterhaltung"
+    ],
+    "amount": "-180.00"
+  },
+  "10": {
+    "name": "Pet Food",
+    "date": "2024-08-01",
+    "tags": [
+      "Haustiere"
     ],
     "amount": "-60.00"
   },
-  "10": {
-    "name": "Charity Donation",
-    "date": "2024-07-02",
+  "11": {
+    "name": "Donation to Charity",
+    "date": "2024-08-15",
     "tags": [
       "Wohltätigkeit"
     ],
     "amount": "-100.00"
-  }
+  },
+  "12": {
+    "name": "Rent for August",
+    "date": "2024-08-05",
+    "tags": [
+      "Wohnen"
+    ],
+    "amount": "-800.00"
+  }  
 }
