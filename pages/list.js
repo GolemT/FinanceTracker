@@ -89,7 +89,7 @@ export default function Home() {
   return (
     <Layout>
         <content className={styles.content}>
-          <div style={{ height: '100%', width: '100%' }}>
+          <div style={{ height: '100%', width: '100%', backgroundcolor: '#FAFAFA' }}>
             <DataGrid
               rows={data}
               columns={columns}
@@ -111,13 +111,13 @@ export default function Home() {
             {selectedRows.length > 0 && (
               <>
                 <IconButton aria-label="delete" size="medium" color="secondary" onClick={handleDelete}>
-                  <img src="/delete.png"/>
+                  <img src="/delete.svg"/>
                 </IconButton>
               </>
             )}
           </div>
             <IconButton aria-label="add" size="medium" color="primary" onClick={add} className={styles.icon}>
-              <img src="/Add_button.png"/>
+              <img src="/Add_button.svg"/>
               </IconButton>
           </div>
           <Dialog

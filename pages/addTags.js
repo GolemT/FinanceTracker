@@ -57,7 +57,7 @@ export default function addTags () {
               onChange={(e) => setDescription(e.target.value)}
               />
 
-              <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.png"/></IconButton>
+              <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.svg"/></IconButton>
             </FormControl>
           </content>
         </Layout>

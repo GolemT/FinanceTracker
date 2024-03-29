@@ -155,7 +155,7 @@ export default function Add() {
           margin="normal"
           variant="outlined"
         />
-          <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.png"/></IconButton>
+          <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.svg"/></IconButton>
         </FormControl>
       </content>
     </Layout>

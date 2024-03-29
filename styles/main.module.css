@@ -1,5 +1,5 @@
 .content {
-    background-color: #efefef;
+    background-color: #FAFAFA;
     right: 0;
     bottom: 0;
     position: absolute;
@@ -19,7 +19,7 @@
     padding: 20px;
     height: stretch;
     width: stretch;
-    gap: 5rem;
+    gap: 2rem;
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
@@ -53,11 +53,11 @@
 .card {
     display: flex;
     flex-wrap: wrap;
-    font-size: 1rem;
-    padding: 10px;
-    border: 1px solid #FFFFFF;
+    font-size: 1em;
+    padding: 2rem;
+    border: 1px solid #bfbfbf;
     border-radius: 36px;
-    /* box-shadow: 10px 10px 10px #3185FC; */
+    box-shadow: 3px 3px 3px #bfbfbf;
     height: 450px;
     color: #070707;
     background-color: #FFFFFF;

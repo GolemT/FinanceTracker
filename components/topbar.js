@@ -21,7 +21,7 @@ export default function topbar () {
     return (
         <header className={styles.header}>
             <h2>{pageName}</h2>
-            <img src="/settings.png" onClick={loadSettings}/>
+            <img src="/settings.svg" onClick={loadSettings}/>
         </header>
     )
 }
