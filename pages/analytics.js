@@ -5,7 +5,7 @@ export default function goals () {
     return (
         <Layout>
             <content className={styles.content}>
-                This is the Goal Page
+                This is the Analytics Page
             </content>
         </Layout>
     )
