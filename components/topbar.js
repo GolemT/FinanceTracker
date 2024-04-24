@@ -6,12 +6,7 @@ import React, { useState } from 'react'
 export default function topbar () {
     const router = useRouter()
     let pathName = router.pathname.replace("/", "");
-    if(pathName === ""){
-        pathName = "Dashboard";
-    }
-    else {
-        
-    }
+    
     const pageName = pathName.replace(pathName.charAt(0), pathName.charAt(0).toUpperCase())
 
     const loadSettings = () => {
