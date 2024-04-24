@@ -1,23 +1,11 @@
 // components/Layout.js
-'use client';
 import Head from 'next/head';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from '@vercel/analytics/react';
 import Sidemenu from './sidemenu'
 import Topbar from './topbar'
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 
-const Layout = ({ children }) => {
-    const user = useUser()
-    const router = useRouter()
-
-    useEffect(() => {
-        if (!user) {
-            router.push('/')
-        }
-    }, [user, router])
+const Layout = ({ children }) => {    
 
     return (
         <div>

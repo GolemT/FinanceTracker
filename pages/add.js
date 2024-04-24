@@ -13,8 +13,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs'
 import styles from '../styles/main.module.css'
+import { checkAuth } from '../app/checkAuth';
  
-export default function Add() {
+const add = ({ user }) => {
     const [name, setName] = useState('');
     const [amount, setAmount] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
@@ -161,3 +162,7 @@ export default function Add() {
     </Layout>
   );
 }
+
+export const getServerSideProps = checkAuth();
+
+export default add;

@@ -5,8 +5,9 @@ import styles from '../styles/main.module.css'
 import { useRouter } from 'next/router'
 import IconButton from '@mui/material/IconButton';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { checkAuth } from '../app/checkAuth';
  
-export default function Home() {
+const Home = ({ user }) => {
   const [data, setData] = useState([]);
   const router = useRouter();
   const [selectedRows, setSelectedRows] = useState([]);
@@ -150,3 +151,7 @@ export default function Home() {
     </Layout>
   );
 }
+
+export const getServerSideProps = checkAuth();
+
+export default list;

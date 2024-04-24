@@ -5,8 +5,9 @@ import styles from '../styles/main.module.css';
 import { useRouter } from 'next/router';
 import IconButton from '@mui/material/IconButton';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { checkAuth } from "../app/checkAuth";
 
-export default function tags () {
+const tags = ({ user }) => {
     const [tags, setTags] = useState({});
     const router = useRouter();
     const [selectedTagKeys, setSelectedTagKeys] = useState([]);
@@ -130,3 +131,7 @@ export default function tags () {
     </Layout>
     )
 }
+
+export const getServerSideProps = checkAuth();
+
+export default tags;

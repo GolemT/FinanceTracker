@@ -2,8 +2,9 @@ import Layout from '../components/Layout';
 import StockChart from '../components/charts/StockChart';
 import PieChart from '../components/charts/PieChart';
 import styles from '../styles/main.module.css'
+import { checkAuth } from '../app/checkAuth';
  
-export default function dashboard() {
+const dashboard = ({ user }) => {
   return (
     <Layout>
       <content className={styles.content}>
@@ -21,3 +22,7 @@ export default function dashboard() {
     </Layout>
   );
 }
+
+export const getServerSideProps = checkAuth();
+
+export default dashboard;

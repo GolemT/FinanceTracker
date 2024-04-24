@@ -4,8 +4,9 @@ import { useRouter } from 'next/router';
 import { FormControl, TextField, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import styles from '../styles/main.module.css'
+import { checkAuth } from '../app/checkAuth';
 
-export default function addTags () {
+const addTags = ({ user }) => {
     const [name, setName] = useState(undefined);
     const [description, setDescription] = useState('');
     const [message, setMessage] = useState(undefined);
@@ -63,3 +64,7 @@ export default function addTags () {
         </Layout>
     )
 }
+
+export const getServerSideProps = checkAuth();
+
+export default addTags;

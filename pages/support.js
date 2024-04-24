@@ -1,7 +1,8 @@
 import Layout from "../components/Layout";
 import styles from '../styles/main.module.css'
+import { checkAuth } from "../app/checkAuth";
 
-export default function support () {
+const support = ({ user }) => {
     return (
         <Layout>
             <content className={styles.content}>
@@ -10,3 +11,7 @@ export default function support () {
         </Layout>
     )
 }
+
+export const getServerSideProps = checkAuth();
+
+export default support;
