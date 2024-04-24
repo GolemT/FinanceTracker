@@ -1,7 +1,6 @@
 // components/Layout.js
 
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from '@vercel/analytics/react';
 import Sidemenu from './sidemenu'
@@ -16,7 +15,6 @@ const Layout = ({ children }) => {
             <link rel="icon" href="/favicon.ico" />
             <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
-        
         <main>
             <Topbar />
             <Sidemenu />

@@ -1,23 +1,23 @@
-import Layout from '../components/Layout';
-import StockChart from '../components/charts/StockChart';
-import PieChart from '../components/charts/PieChart';
-import styles from '../styles/main.module.css'
- 
+'use client';
+import { useEffect } from "react";
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { useRouter } from 'next/router';
+
 export default function Home() {
+
+  const { user, error, isLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
+  
   return (
-    <Layout>
-      <content className={styles.content}>
-        <cards className={styles.grid}>
-          <div className={styles.card}>
-            <h3>Overview</h3>
-            <StockChart />
-          </div>
-          <div className={styles.card}>
-            <h3>Based on Tags</h3>
-            <PieChart />
-          </div>
-        </cards> 
+      <content>
+        <h1>The Place to watch over your Finances</h1>
+        <a href="/api/auth/login">Register</a> today!        
       </content>
-    </Layout>
   );
-}
+};
