@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from '../app/checkAuth';
  
-const Home = ({ user }) => {
+const list = ({ user }) => {
   const [data, setData] = useState([]);
   const router = useRouter();
   const [selectedRows, setSelectedRows] = useState([]);
