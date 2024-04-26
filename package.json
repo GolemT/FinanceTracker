@@ -8,7 +8,6 @@
     "dev": "next dev",
     "start": "next start",
     "tests": "npx playwright test",
-    "electron": "electron ."
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
@@ -27,6 +26,7 @@
     "cors": "^2.8.5",
     "date-fns": "^3.4.0",
     "dayjs": "^1.11.10",
+    "mongodb": "^6.5.0",
     "next": "latest",
     "path": "^0.12.7",
     "react": "^18.2.0",
@@ -38,22 +38,6 @@
   "devDependencies": {
     "@playwright/test": "^1.40.1",
     "@types/node": "^20.10.4",
-    "electron-builder": "^24.13.3",
     "sass": "^1.69.0"
-  },
-  "build": {
-    "appId": "com.yourapp.id",
-    "mac": {
-      "target": "dmg",
-      "icon": "public/logo_png.png"
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "public/logo_png.png"
-    },
-    "linux": {
-      "target": "AppImage",
-      "icon": "public/logo_png.png"
-    }
   }
 }
