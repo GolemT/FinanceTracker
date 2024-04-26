@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from '@vercel/analytics/react';
 import Sidemenu from './sidemenu'
 import Topbar from './topbar'
+import styles from '../styles/layout.module.css'
 
 const Layout = ({ children }) => {    
 
@@ -11,12 +12,13 @@ const Layout = ({ children }) => {
         <div>
             <SpeedInsights />
             <Head>
+                <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
                 <title>FinanceTracker</title>
                 <link rel="icon" href="/favicon.ico" />
                 <meta name="viewport" content="initial-scale=1, width=device-width" />
             </Head>
             
-            <main>
+            <main className={styles.layout}>
                 <Topbar />
                 <Sidemenu />
                 {children}

@@ -12,7 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs'
-import styles from '../styles/main.module.css'
+import styles from '../../styles/main.module.css'
 import { checkAuth } from '../../app/checkAuth';
  
 const add = ({ user }) => {

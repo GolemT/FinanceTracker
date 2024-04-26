@@ -1,7 +1,7 @@
 import Layout from "../../components/Layout";
 import React, {useState, useEffect} from "react";
 import { DataGrid } from '@mui/x-data-grid';
-import styles from '../styles/main.module.css';
+import styles from '../../styles/main.module.css';
 import { useRouter } from 'next/router';
 import IconButton from '@mui/material/IconButton';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';

@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 export default function topbar () {
     const router = useRouter()
-    let pathName = router.pathname.replace("/", "");
+    let pathName = router.pathname.split("/")[2];
     
     const pageName = pathName.replace(pathName.charAt(0), pathName.charAt(0).toUpperCase())
 
