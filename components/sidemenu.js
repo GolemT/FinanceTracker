@@ -11,26 +11,26 @@ export default function sidemenu() {
 
     return (
         <aside className={styles.sidemenu}>
-            <span className={styles.title} onClick={() => router.push('/dashboard')}>
+            <span className={styles.title} onClick={() => router.push('/access/dashboard')}>
                 <img src="/AppName.svg" />
             </span>
             
             <nav className={styles.nav}>    
-            <Link href="/" passHref className={styles.Link}>
+            <Link href="/access/dashboard" passHref className={styles.Link}>
                     <span style={getLinkStyle('/dashboard')}>Dashboard</span>
                 </Link>
-                <Link href="/list" passHref className={styles.Link}>
+                <Link href="/access/list" passHref className={styles.Link}>
                     <span style={getLinkStyle('/list')}>List</span>
                 </Link>
-                <Link href="/analytics" passHref className={styles.Link}>
-                    <span style={getLinkStyle('/goals')}>Analytics</span>
+                <Link href="/access/analytics" passHref className={styles.Link}>
+                    <span style={getLinkStyle('/analytics')}>Analytics</span>
                 </Link>
-                <Link href="/tags" passHref className={styles.Link}>
+                <Link href="/access/tags" passHref className={styles.Link}>
                     <span style={getLinkStyle('/tags')}>Tags</span>
                 </Link>
             </nav>
             <span className={styles.support}>
-            <Link href="/support" passHref className={styles.Link}>
+            <Link href="/access/support" passHref className={styles.Link}>
                     <span style={getLinkStyle('/support')}>Support</span>
                 </Link>
             </span>

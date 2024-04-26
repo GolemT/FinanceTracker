@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Layout from '../components/Layout';
+import Layout from '../../components/Layout';
 import { useRouter } from 'next/router';
 import { FormControl, TextField, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import styles from '../styles/main.module.css'
-import { checkAuth } from '../app/checkAuth';
+import { checkAuth } from '../../app/checkAuth';
 
 const addTags = ({ user }) => {
     const [name, setName] = useState(undefined);

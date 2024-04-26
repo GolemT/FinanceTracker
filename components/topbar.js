@@ -1,5 +1,4 @@
-import { Dashboard } from '@mui/icons-material';
-import styles from '../styles/layout.module.css'
+import styles from '../styles/layout.module.css';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react'
 
@@ -10,7 +9,7 @@ export default function topbar () {
     const pageName = pathName.replace(pathName.charAt(0), pathName.charAt(0).toUpperCase())
 
     const loadSettings = () => {
-        router.push('/settings')
+        router.push('/access/settings')
     }
 
     return (

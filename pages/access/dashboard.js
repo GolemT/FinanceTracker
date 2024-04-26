@@ -1,8 +1,8 @@
-import Layout from '../components/Layout';
-import StockChart from '../components/charts/StockChart';
-import PieChart from '../components/charts/PieChart';
-import styles from '../styles/main.module.css'
-import { checkAuth } from '../app/checkAuth';
+import Layout from '../../components/Layout';
+import StockChart from '../../components/charts/StockChart';
+import PieChart from '../../components/charts/PieChart';
+import styles from '../../styles/main.module.css'
+import { checkAuth } from '../../app/checkAuth';
  
 const dashboard = ({ user }) => {
   return (

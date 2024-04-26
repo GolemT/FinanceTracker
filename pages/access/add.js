@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import Layout from '../components/Layout';
+import Layout from '../../components/Layout';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -13,7 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs'
 import styles from '../styles/main.module.css'
-import { checkAuth } from '../app/checkAuth';
+import { checkAuth } from '../../app/checkAuth';
  
 const add = ({ user }) => {
     const [name, setName] = useState('');
