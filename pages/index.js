@@ -1,19 +1,7 @@
-'use client';
-import { useEffect } from "react";
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { useRouter } from 'next/router';
 import Link from 'next/link'
 import styles from '../styles/outside.module.css'
 
 export default function Home() {
-  const { user } = useUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (user) {
-      router.push('/access/dashboard');
-    }
-  }, [user, router]);
   
   return (
     <div className={styles.container}>

@@ -1,21 +1,7 @@
-'use client';
-import { useEffect } from "react";
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { useRouter } from 'next/router';
 import Link from 'next/link'
 import styles from '../styles/outside.module.css'
 
 export default function Features() {
-  const { user } = useUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (user) {
-      router.push('/access/dashboard');
-    }
-  }, [user, router]);
-  
-
   //TODO: Bilder für die einzelnen features hinzufügen
   return (
     <div className={styles.container}>

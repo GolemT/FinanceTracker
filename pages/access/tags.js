@@ -25,15 +25,25 @@ const tags = ({ user }) => {
     };
 
     const fetchTags = async () => {
-        const loadedTags = await window.electron.loadTags(); // Fetches tags
-        // Convert the tags object into an array structure suitable for DataGrid
-        const tagsArray = Object.entries(loadedTags).map(([key, description], index) => ({
-            id: index, // DataGrid requires a unique 'id' field
-            tag: key,
-            description: description,
-        }));
-        setTags(tagsArray);
-    };
+      try {
+          const response = await fetch(`/api/v1/tags/${user.nickname}`);
+          if (response.ok) {
+              const loadedTags = await response.json();
+              const tagsArray = loadedTags.map((tag, index) => ({
+                  id: index, // Eindeutige ID, falls die Tags keine eigene ID haben
+                  tag: tag.name, // Name des Tags
+                  description: tag.desc, // Beschreibung des Tags
+              }));
+              setTags(tagsArray);
+          } else {
+              throw new Error('Failed to fetch tags');
+          }
+      } catch (error) {
+          console.error('Error fetching tags:', error);
+          // Implementiere einen Error-Handling-Mechanismus, z.B. Anzeigen einer Fehlermeldung
+      }
+  };
+  
 
     useEffect(() => {
       fetchTags();
@@ -63,7 +73,7 @@ const tags = ({ user }) => {
   
 
     const addTag = () => {
-        router.push('/addTags')
+        router.push('/access/addTags')
     }
 
     const handleDelete = () => {

@@ -86,7 +86,7 @@ const add = ({ user }) => {
         const success = await window.electron.saveData({ name, date: formattedDate, tags: selectedTags, amount: formattedAmount });
     // Überprüfe, ob die Speicherung erfolgreich war, bevor du navigierst
     if (success) {
-        router.push('/list');
+        router.push('/access/list');
     } else {
       // Handle Fehlerfall
       setMessage('Error while saving');

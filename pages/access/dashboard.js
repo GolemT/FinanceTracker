@@ -5,6 +5,7 @@ import styles from '../../styles/main.module.css'
 import { checkAuth } from '../../app/checkAuth';
  
 const dashboard = ({ user }) => {
+
   return (
     <Layout>
       <content className={styles.content}>

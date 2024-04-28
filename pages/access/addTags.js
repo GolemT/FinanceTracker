@@ -23,7 +23,7 @@ const addTags = ({ user }) => {
         // Hier könntest du die Daten an den Hauptprozess von Electron senden oder in den Zustand deiner Anwendung speichern
         const success = await window.electron.saveTag({ key: name, description });
     if (success) {
-        router.push('/tags'); // Navigiere zur Tag-Seite
+        router.push('/access/tags'); // Navigiere zur Tag-Seite
     } else if (success === "No Input"){
         setMessage("No name was entered")
     }

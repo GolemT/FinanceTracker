@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import IconButton from '@mui/material/IconButton';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from '../../app/checkAuth';
+
  
 const list = ({ user }) => {
   const [data, setData] = useState([]);
@@ -25,15 +26,27 @@ const list = ({ user }) => {
   };
 
   const fetchData = async () => {
-    const loadedData = await window.electron.loadData();
-    const dataArray = Object.entries(loadedData).map(([id, item]) => ({
-      id: id, // Use the key as the id
-      name: item.name,
-      date: item.date,
-      tags: item.tags.join(", "), // Assuming tags is an array, join them for display
-      amount: item.amount
-  }));
-    setData(dataArray);
+    try {
+      const response = await fetch(`/api/v1/transactions/${user.nickname}`);
+      if (response.ok) {
+        const loadedData = await response.json();
+        const dataArray = loadedData.map(item => ({
+          id: item._id, // MongoDB IDs are stored under _id
+          name: item.name,
+          date: item.date,
+          tags: item.tags.join(", "), // Assuming tags is an array
+          amount: item.amount
+        }));
+        setData(dataArray);
+      } else {
+        throw new Error('Failed to fetch data');
+      }
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      setSnackbarMessage('Error fetching data.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+    }
   };
 
     useEffect(() => {
@@ -63,7 +76,7 @@ const list = ({ user }) => {
     ];
 
     const add = () => {
-      router.push('/add')
+      router.push('/access/add')
   }
 
   const animationClass = selectedRows.length > 0 ? styles.animateButtons : styles.none;
