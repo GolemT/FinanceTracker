@@ -64,19 +64,29 @@ const tags = ({ user }) => {
   const animationClass = selectedTagKeys.length > 0 ? styles.animateButtons : styles.none;
 
   const handleDeleteConfirm = async () => {
-      const tagsToDelete = selectedTagKeys;
-      const success = await window.electron.deleteTag(tagsToDelete)
-      if(success) {
-        fetchTags();
-        setSnackbarMessage('Tag was deleted successfully.');
-        setSnackbarSeverity('success');
+    try {
+      const response = await fetch('/api/v1/tags/delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ names: selectedTagKeys, user: user.nickname })
+      });
+      if (response.ok) {
+          setSnackbarMessage('Tags successfully deleted');
+          setSnackbarSeverity('success');
+          fetchTags(); // Re-fetch tags to update the list
       } else {
-        setSnackbarMessage('Fehler beim Löschen der Daten.');
-        setSnackbarSeverity('error');
+          throw new Error('Failed to delete tags');
       }
-      setSnackbarOpen(true);
+  } catch (error) {
+      console.error('Error deleting tags:', error);
+      setSnackbarMessage(error.message);
+      setSnackbarSeverity('error');
+  } finally {
       setDialogOpen(false);
-      }
+      setSnackbarOpen(true);
+      setIsLoading(false);
+  }
+};
   
 
     const addTag = () => {

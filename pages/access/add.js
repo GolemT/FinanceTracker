@@ -14,12 +14,14 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs'
 import styles from '../../styles/main.module.css'
 import { checkAuth } from '../../app/checkAuth';
+import { CircularProgress } from '@mui/material';
  
 const add = ({ user }) => {
     const [name, setName] = useState('');
     const [amount, setAmount] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
     const [availableTags, setAvailableTags] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     // Formatiere das aktuelle Datum im YYYY-MM-DD Format für das input[type='date']
     // new Date().toISOString().split('T')[0]
     const [date, setDate] = useState(dayjs());
@@ -40,14 +42,26 @@ const add = ({ user }) => {
     
 
     useEffect(() => {
-      const loadTags = async () => {
-          const tagsObj = await window.electron.loadTags();
-          const tagsKeys = Object.keys(tagsObj)
-          setAvailableTags(tagsKeys);
-      };
+      const fetchTags = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetch(`/api/v1/tags/${user.nickname}`);
+            const data = await response.json();
+            if (response.ok) {
+                setAvailableTags(data.map(tag => tag.name));
+            } else {
+                throw new Error('Failed to fetch tags');
+            }
+        } catch (error) {
+            console.error('Error fetching tags:', error);
+            setMessage('Failed to load tags');
+        } finally {
+          setIsLoading(false);
+        }
+    };
 
-      loadTags();
-  }, []);
+    fetchTags();
+}, []);
 
   function getStyles(name, personName, theme) {
     return {
@@ -75,90 +89,111 @@ const add = ({ user }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if ( name === '' || amount === '') {
-          console.log("No Name given")
           setMessage("Required Fields were not filled");
           return;
         }
 
         const formattedDate = date.format('YYYY-MM-DD');
         const formattedAmount = parseFloat(amount).toFixed(2);
-        // Hier könntest du die Daten an den Hauptprozess von Electron senden oder in den Zustand deiner Anwendung speichern
-        const success = await window.electron.saveData({ name, date: formattedDate, tags: selectedTags, amount: formattedAmount });
-    // Überprüfe, ob die Speicherung erfolgreich war, bevor du navigierst
-    if (success) {
-        router.push('/access/list');
-    } else {
-      // Handle Fehlerfall
-      setMessage('Error while saving');
+        
+        try {
+          const response = await fetch('/api/v1/transactions/add', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  user: user.nickname,
+                  name,
+                  date: formattedDate,
+                  tags: selectedTags,
+                  amount: formattedAmount
+              }),
+          });
+        
+          const result = await response.json();
+          if (response.ok) {
+            router.push('/access/list');
+        } else {
+            throw new Error(result.message || 'Failed to add transaction');
+        }
+    } catch (error) {
+        console.error('Error adding transaction:', error);
+        setMessage(error.message || 'Failed to add transaction');
     }
   };
 
   return (
     <Layout>
-      <content className={styles.content}>
-        <h3>Add a new Transaction</h3>
-        <h4 className={styles.warning}>{message}</h4>
-        <FormControl margin="normal" sx={{ m: 1, width: '100%', '& > :not(style)': { m:1 }, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+      
+      { isLoading ? (
+        <CircularProgress />
+      ): (
+          <content className={styles.content}>
+          <h3>Add a new Transaction</h3>
+          <h4 className={styles.warning}>{message}</h4>
+          <FormControl margin="normal" sx={{ m: 1, width: '100%', '& > :not(style)': { m:1 }, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
 
-          <TextField 
-          id="outlined-basic" 
-          label="Name" 
-          variant="outlined" 
-          margin="normal" 
-          required
-          sx={{ minWidth: 300 }}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+            <TextField 
+            id="outlined-basic" 
+            label="Name" 
+            variant="outlined" 
+            margin="normal" 
+            required
+            sx={{ minWidth: 300 }}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            />
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker 
+                  label="Transaction Date"
+                  value={date}
+                  sx={{ minWidth: 300 }}
+                  onChange={(newValue) => {
+                    setDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} margin='normal' required />}
+                  />
+            </LocalizationProvider>
+
+            <FormControl sx={{ minWidth: 300, margin: 'normal' }}>
+              <InputLabel id="tags-label">Tags (Optional)</InputLabel>
+              <Select
+                labelId="tags-label"
+                id="tags-select"
+                multiple
+                value={selectedTags}
+                onChange={handleTagChange}
+                input={<OutlinedInput label="Tag" />}
+                MenuProps={MenuProps}
+              >
+              {availableTags.map((tag) => (
+                <MenuItem key={tag} value={tag} style={getStyles(tag, selectedTags, theme)}>
+                  {tag}
+                </MenuItem>
+              ))}
+              </Select>
+            </FormControl>
+
+            <TextField
+            id="outlined-number"
+            label="Amount"
+            type="number"
+            required
+            value={amount}
+            sx={{ minWidth: 300 }}
+            onChange={(e) => setAmount(e.target.value)}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">€</InputAdornment>,
+            }}
+            margin="normal"
+            variant="outlined"
           />
-
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker 
-                label="Transaction Date"
-                value={date}
-                sx={{ minWidth: 300 }}
-                onChange={(newValue) => {
-                  setDate(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} margin='normal' required />}
-                />
-          </LocalizationProvider>
-
-          <FormControl sx={{ minWidth: 300, margin: 'normal' }}>
-            <InputLabel id="tags-label">Tags (Optional)</InputLabel>
-            <Select
-              labelId="tags-label"
-              id="tags-select"
-              multiple
-              value={selectedTags}
-              onChange={handleTagChange}
-              input={<OutlinedInput label="Tag" />}
-              MenuProps={MenuProps}
-            >
-            {availableTags.map((tag) => (
-              <MenuItem key={tag} value={tag} style={getStyles(tag, selectedTags, theme)}>
-                {tag}
-              </MenuItem>
-            ))}
-            </Select>
+            <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.svg"/></IconButton>
           </FormControl>
-
-          <TextField
-          id="outlined-number"
-          label="Amount"
-          type="number"
-          required
-          value={amount}
-          sx={{ minWidth: 300 }}
-          onChange={(e) => setAmount(e.target.value)}
-          InputProps={{
-            endAdornment: <InputAdornment position="end">€</InputAdornment>,
-          }}
-          margin="normal"
-          variant="outlined"
-        />
-          <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.svg"/></IconButton>
-        </FormControl>
-      </content>
+        </content>
+      )}
     </Layout>
   );
 }

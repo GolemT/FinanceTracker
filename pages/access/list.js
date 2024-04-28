@@ -87,14 +87,41 @@ const list = ({ user }) => {
   const animationClass = selectedRows.length > 0 ? styles.animateButtons : styles.none;
 
   const handleDeleteConfirm = async () => {
-      const idsToDelete = selectedRows;
-      const success = await window.electron.deleteData(idsToDelete)
-      if(success) {
-        fetchData();
-        setSnackbarMessage('Data was deleted successfully.');
-        setSnackbarSeverity('success');
-      } else {
-        setSnackbarMessage('Fehler beim Löschen der Daten.');
+    const namesToDelete = selectedRows.map(rowId => {
+      const row = data.find(item => item.id === rowId);
+      return row ? row.name : null;
+    }).filter(name => name !== null); // Entfernen Sie null Werte, falls welche existieren
+
+  if (namesToDelete.length === 0) {
+      console.error("No valid names to delete");
+      setSnackbarMessage('No valid transactions selected.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      return;
+  }
+      
+      try {
+        const response = await fetch('/api/v1/transactions/delete', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            names: namesToDelete,
+            user: user.nickname
+          })
+        });
+
+        const result = await response.json();
+        if(response.ok) {
+          fetchData()
+          setSnackbarMessage('Data was deleted successfully.');
+          setSnackbarSeverity('success');
+        } else {
+          throw new Error(result.message || 'Failed to delete transactions');
+        }
+      } catch (error) {
+        setSnackbarMessage(error.message  || 'Failed to delete transactions');
         setSnackbarSeverity('error');
       }
       setDialogOpen(false);
@@ -125,6 +152,7 @@ const list = ({ user }) => {
               ]}
               onRowSelectionModelChange={(newSelection) => {
                 setSelectedRows(newSelection)
+                console.log(selectedRows)
               }}
             />
           </div>
