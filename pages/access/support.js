@@ -6,7 +6,7 @@ const support = ({ user }) => {
     return (
         <Layout>
             <content className={styles.content}>
-            This is the support page
+                <h1>Coming Soon</h1>
             </content>
         </Layout>
     )

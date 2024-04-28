@@ -58,8 +58,8 @@ const addTags = ({ user }) => {
             },
             body: JSON.stringify({
               user: user.nickname,
-              name,
-              description
+              name: name,
+              desc: description
           }),
           });
           const result = await response.json();

@@ -6,7 +6,7 @@ const analytics = ({ user }) => {
     return (
         <Layout>
             <content className={styles.content}>
-                This is the Analytics Page
+                <h1>Coming Soon</h1>
             </content>
         </Layout>
     )

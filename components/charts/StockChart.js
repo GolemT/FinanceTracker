@@ -1,38 +1,40 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Chart from 'chart.js/auto';
+import { CircularProgress } from '@mui/material';
 
-const MyChart = () => {
+const MyChart = ({ transactions }) => {
   const chartRef = useRef(null);
-  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [graphData, setGraphData] = useState({
     labels: [],
     dataPoints: []
   })
 
   const fetchData = async () => {
-    const loadedData = await window.electron.loadData();
-    const dataArray = Object.values(loadedData).map((item) => ({
-      date: item.date,
-      amount: parseFloat(item.amount)
-  })).sort((a, b) => new Date(a.date) - new Date(b.date));
+    setIsLoading(true);
+    const dataArray = Object.values(transactions).map((item) => ({
+        date: item.date,
+        amount: parseFloat(item.amount)
+    })).sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    let cummulativeSum = 0;
-    const sumbsByDate = dataArray.reduce((acc, curr) => {
-      cummulativeSum += curr.amount;
-      acc.dates.push(curr.date);
-      acc.sums.push(cummulativeSum);
-      return acc;
-    }, {dates: [], sums: []});
-    
-    setGraphData({
-      labels: sumbsByDate.dates,
-      dataPoints: sumbsByDate.sums
-    });
-  };
+      let cummulativeSum = 0;
+      const sumbsByDate = dataArray.reduce((acc, curr) => {
+        cummulativeSum += curr.amount;
+        acc.dates.push(curr.date);
+        acc.sums.push(cummulativeSum);
+        return acc;
+      }, {dates: [], sums: []});
+      
+      setGraphData({
+        labels: sumbsByDate.dates,
+        dataPoints: sumbsByDate.sums
+      });
+    setIsLoading(false);
+};
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [transactions]);
 
     useEffect(() => {
       const myChartRef = chartRef.current.getContext("2d");
@@ -59,7 +61,9 @@ const MyChart = () => {
   
 
   return (
-      <canvas ref={chartRef} />
+    <div>
+      {isLoading ? <CircularProgress /> : <canvas ref={chartRef} />}
+  </div>
   );
 }
 
