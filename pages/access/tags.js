@@ -1,13 +1,16 @@
-import Layout from "../components/Layout";
+import Layout from "../../components/Layout";
 import React, {useState, useEffect} from "react";
 import { DataGrid } from '@mui/x-data-grid';
-import styles from '../styles/main.module.css';
+import styles from '../../styles/main.module.css';
 import { useRouter } from 'next/router';
 import IconButton from '@mui/material/IconButton';
+import { CircularProgress } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { checkAuth } from "../../app/checkAuth";
 
-export default function tags () {
+const tags = ({ user }) => {
     const [tags, setTags] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const [selectedTagKeys, setSelectedTagKeys] = useState([]);
 
@@ -24,15 +27,30 @@ export default function tags () {
     };
 
     const fetchTags = async () => {
-        const loadedTags = await window.electron.loadTags(); // Fetches tags
-        // Convert the tags object into an array structure suitable for DataGrid
-        const tagsArray = Object.entries(loadedTags).map(([key, description], index) => ({
-            id: index, // DataGrid requires a unique 'id' field
-            tag: key,
-            description: description,
-        }));
-        setTags(tagsArray);
-    };
+      setIsLoading(true);
+      try {
+          const response = await fetch(`/api/v1/tags/${user.nickname}`);
+          if (response.ok) {
+              const loadedTags = await response.json();
+              const tagsArray = loadedTags.map((tag, index) => ({
+                  id: index, // Eindeutige ID, falls die Tags keine eigene ID haben
+                  tag: tag.name, // Name des Tags
+                  description: tag.desc, // Beschreibung des Tags
+              }));
+              setTags(tagsArray);
+          } else {
+              throw new Error('Failed to fetch tags');
+          }
+        } catch (error) {
+          console.error('Error fetching tags:', error);
+          setSnackbarMessage('Error fetching tags.');
+          setSnackbarSeverity('error');
+          setSnackbarOpen(true);
+      } finally {
+        setIsLoading(false); // Beende das Laden
+      }
+  };
+  
 
     useEffect(() => {
       fetchTags();
@@ -46,23 +64,33 @@ export default function tags () {
   const animationClass = selectedTagKeys.length > 0 ? styles.animateButtons : styles.none;
 
   const handleDeleteConfirm = async () => {
-      const tagsToDelete = selectedTagKeys;
-      const success = await window.electron.deleteTag(tagsToDelete)
-      if(success) {
-        fetchTags();
-        setSnackbarMessage('Tag was deleted successfully.');
-        setSnackbarSeverity('success');
+    try {
+      const response = await fetch('/api/v1/tags/delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ names: selectedTagKeys, user: user.nickname })
+      });
+      if (response.ok) {
+          setSnackbarMessage('Tags successfully deleted');
+          setSnackbarSeverity('success');
+          fetchTags(); // Re-fetch tags to update the list
       } else {
-        setSnackbarMessage('Fehler beim Löschen der Daten.');
-        setSnackbarSeverity('error');
+          throw new Error('Failed to delete tags');
       }
-      setSnackbarOpen(true);
+  } catch (error) {
+      console.error('Error deleting tags:', error);
+      setSnackbarMessage(error.message);
+      setSnackbarSeverity('error');
+  } finally {
       setDialogOpen(false);
-      }
+      setSnackbarOpen(true);
+      setIsLoading(false);
+  }
+};
   
 
     const addTag = () => {
-        router.push('/addTags')
+        router.push('/access/addTags')
     }
 
     const handleDelete = () => {
@@ -72,6 +100,9 @@ export default function tags () {
     return (
         <Layout>
             <content className={styles.content}>
+              {isLoading ? (
+                <CircularProgress />
+              ): (
                 <div style={{ height: '100%', width: '100%', backgroundcolor: '#FAFAFA' }}>
                     <DataGrid
                         rows={tags}
@@ -86,6 +117,7 @@ export default function tags () {
                           }}
                     />
                 </div>
+                )}
                 <div className={styles.buttons}>
                     <div className={animationClass}>
                         {selectedTagKeys.length > 0 && (
@@ -130,3 +162,7 @@ export default function tags () {
     </Layout>
     )
 }
+
+export const getServerSideProps = checkAuth();
+
+export default tags;

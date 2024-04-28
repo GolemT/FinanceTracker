@@ -1,13 +1,17 @@
-import Layout from '../components/Layout';
+import Layout from '../../components/Layout';
 import React, {useEffect, useState} from 'react'
 import { DataGrid } from '@mui/x-data-grid';
-import styles from '../styles/main.module.css'
+import styles from '../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import IconButton from '@mui/material/IconButton';
+import { CircularProgress } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { checkAuth } from '../../app/checkAuth';
+
  
-export default function Home() {
+const list = ({ user }) => {
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -24,15 +28,30 @@ export default function Home() {
   };
 
   const fetchData = async () => {
-    const loadedData = await window.electron.loadData();
-    const dataArray = Object.entries(loadedData).map(([id, item]) => ({
-      id: id, // Use the key as the id
-      name: item.name,
-      date: item.date,
-      tags: item.tags.join(", "), // Assuming tags is an array, join them for display
-      amount: item.amount
-  }));
-    setData(dataArray);
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/v1/transactions/${user.nickname}`);
+      if (response.ok) {
+        const loadedData = await response.json();
+        const dataArray = loadedData.map(item => ({
+          id: item._id, // MongoDB IDs are stored under _id
+          name: item.name,
+          date: item.date,
+          tags: item.tags.join(", "), // Assuming tags is an array
+          amount: item.amount
+        }));
+        setData(dataArray);
+      } else {
+        throw new Error('Failed to fetch data');
+      }
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      setSnackbarMessage('Error fetching data.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+    } finally {
+      setIsLoading(false)
+    }
   };
 
     useEffect(() => {
@@ -62,20 +81,47 @@ export default function Home() {
     ];
 
     const add = () => {
-      router.push('/add')
+      router.push('/access/add')
   }
 
   const animationClass = selectedRows.length > 0 ? styles.animateButtons : styles.none;
 
   const handleDeleteConfirm = async () => {
-      const idsToDelete = selectedRows;
-      const success = await window.electron.deleteData(idsToDelete)
-      if(success) {
-        fetchData();
-        setSnackbarMessage('Data was deleted successfully.');
-        setSnackbarSeverity('success');
-      } else {
-        setSnackbarMessage('Fehler beim Löschen der Daten.');
+    const namesToDelete = selectedRows.map(rowId => {
+      const row = data.find(item => item.id === rowId);
+      return row ? row.name : null;
+    }).filter(name => name !== null); // Entfernen Sie null Werte, falls welche existieren
+
+  if (namesToDelete.length === 0) {
+      console.error("No valid names to delete");
+      setSnackbarMessage('No valid transactions selected.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      return;
+  }
+      
+      try {
+        const response = await fetch('/api/v1/transactions/delete', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            names: namesToDelete,
+            user: user.nickname
+          })
+        });
+
+        const result = await response.json();
+        if(response.ok) {
+          fetchData()
+          setSnackbarMessage('Data was deleted successfully.');
+          setSnackbarSeverity('success');
+        } else {
+          throw new Error(result.message || 'Failed to delete transactions');
+        }
+      } catch (error) {
+        setSnackbarMessage(error.message  || 'Failed to delete transactions');
         setSnackbarSeverity('error');
       }
       setDialogOpen(false);
@@ -89,6 +135,9 @@ export default function Home() {
   return (
     <Layout>
         <content className={styles.content}>
+          { isLoading ? (
+            <CircularProgress />
+          ): (
           <div style={{ height: '100%', width: '100%', backgroundcolor: '#FAFAFA' }}>
             <DataGrid
               rows={data}
@@ -103,9 +152,11 @@ export default function Home() {
               ]}
               onRowSelectionModelChange={(newSelection) => {
                 setSelectedRows(newSelection)
+                console.log(selectedRows)
               }}
             />
           </div>
+          )}
           <div className={styles.buttons}>
           <div className={animationClass}>
             {selectedRows.length > 0 && (
@@ -150,3 +201,7 @@ export default function Home() {
     </Layout>
   );
 }
+
+export const getServerSideProps = checkAuth();
+
+export default list;
