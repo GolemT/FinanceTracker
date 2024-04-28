@@ -4,11 +4,13 @@ import { DataGrid } from '@mui/x-data-grid';
 import styles from '../../styles/main.module.css';
 import { useRouter } from 'next/router';
 import IconButton from '@mui/material/IconButton';
+import { CircularProgress } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from "../../app/checkAuth";
 
 const tags = ({ user }) => {
     const [tags, setTags] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const [selectedTagKeys, setSelectedTagKeys] = useState([]);
 
@@ -25,6 +27,7 @@ const tags = ({ user }) => {
     };
 
     const fetchTags = async () => {
+      setIsLoading(true);
       try {
           const response = await fetch(`/api/v1/tags/${user.nickname}`);
           if (response.ok) {
@@ -38,9 +41,13 @@ const tags = ({ user }) => {
           } else {
               throw new Error('Failed to fetch tags');
           }
-      } catch (error) {
+        } catch (error) {
           console.error('Error fetching tags:', error);
-          // Implementiere einen Error-Handling-Mechanismus, z.B. Anzeigen einer Fehlermeldung
+          setSnackbarMessage('Error fetching tags.');
+          setSnackbarSeverity('error');
+          setSnackbarOpen(true);
+      } finally {
+        setIsLoading(false); // Beende das Laden
       }
   };
   
@@ -83,6 +90,9 @@ const tags = ({ user }) => {
     return (
         <Layout>
             <content className={styles.content}>
+              {isLoading ? (
+                <CircularProgress />
+              ): (
                 <div style={{ height: '100%', width: '100%', backgroundcolor: '#FAFAFA' }}>
                     <DataGrid
                         rows={tags}
@@ -97,6 +107,7 @@ const tags = ({ user }) => {
                           }}
                     />
                 </div>
+                )}
                 <div className={styles.buttons}>
                     <div className={animationClass}>
                         {selectedTagKeys.length > 0 && (

@@ -4,12 +4,14 @@ import { DataGrid } from '@mui/x-data-grid';
 import styles from '../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import IconButton from '@mui/material/IconButton';
+import { CircularProgress } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from '../../app/checkAuth';
 
  
 const list = ({ user }) => {
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -26,6 +28,7 @@ const list = ({ user }) => {
   };
 
   const fetchData = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(`/api/v1/transactions/${user.nickname}`);
       if (response.ok) {
@@ -46,6 +49,8 @@ const list = ({ user }) => {
       setSnackbarMessage('Error fetching data.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -103,6 +108,9 @@ const list = ({ user }) => {
   return (
     <Layout>
         <content className={styles.content}>
+          { isLoading ? (
+            <CircularProgress />
+          ): (
           <div style={{ height: '100%', width: '100%', backgroundcolor: '#FAFAFA' }}>
             <DataGrid
               rows={data}
@@ -120,6 +128,7 @@ const list = ({ user }) => {
               }}
             />
           </div>
+          )}
           <div className={styles.buttons}>
           <div className={animationClass}>
             {selectedRows.length > 0 && (
