@@ -12,13 +12,12 @@ const Layout = ({ children }) => {
         <div>
             <SpeedInsights />
             <Head>
-                <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
                 <title>FinanceTracker</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/logo.svg" />
                 <meta name="viewport" content="initial-scale=1, width=device-width" />
             </Head>
-            
             <main className={styles.layout}>
+                <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />  
                 <Topbar />
                 <Sidemenu />
                 {children}
