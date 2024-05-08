@@ -5,9 +5,9 @@ import { checkAuth } from "../../app/checkAuth";
 const support = ({ user }) => {
     return (
         <Layout>
-            <content className={styles.content}>
+            <div id="content" className={styles.content}>
                 <h1>Coming Soon</h1>
-            </content>
+            </div>
         </Layout>
     )
 }

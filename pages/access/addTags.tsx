@@ -8,11 +8,11 @@ import { checkAuth } from '../../app/checkAuth';
 import { CircularProgress } from '@mui/material';
 
 const addTags = ({ user }) => {
-    const [name, setName] = useState(undefined);
+    const [name, setName] = useState("");
     const [description, setDescription] = useState('');
-    const [message, setMessage] = useState(undefined);
+    const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [availableTags, setAvailableTags] = useState([]);
+    const [availableTags, setAvailableTags] = useState<string[]>([]);
     const router = useRouter();
 
     useEffect(() => {
@@ -79,7 +79,7 @@ const addTags = ({ user }) => {
           { isLoading ? (
             <CircularProgress />
           ) : (
-          <content className={styles.content}>
+          <div id="content" className={styles.content}>
             <h3>Add a new Tag</h3>
             <h4 className={styles.warning}>{message}</h4>
             <FormControl sx={{ m: 1, width: 300 }}>
@@ -105,7 +105,7 @@ const addTags = ({ user }) => {
 
               <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.svg"/></IconButton>
             </FormControl>
-          </content>
+          </div>
           )}
         </Layout>
     )

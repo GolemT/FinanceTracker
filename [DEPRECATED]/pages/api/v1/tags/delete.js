@@ -1,6 +1,6 @@
-// Dateipfad: pages/api/transactions/delete.js
+// Dateipfad: pages/api/tags/delete.js
 
-import client from '../../../../app/db';
+import client from '../../../../../app/db';
 
 export default async function handler(req, res) {
   if (req.method === 'DELETE') {
@@ -13,15 +13,15 @@ export default async function handler(req, res) {
 
       await client.connect();
       const database = client.db("FinanceTracker");
-      const transactions = database.collection("transactions");
+      const tags = database.collection("tags");
 
-      const result = await transactions.deleteMany({
+      const result = await tags.deleteMany({ 
         name: { $in: names},
         user: user 
       });
       
       if (result.deletedCount === names.length) {
-        res.status(200).json({ message: 'Transaction deleted successfully' });
+        res.status(200).json({ message: 'Tags deleted successfully' });
       } else {
         throw new Error("Some transactions couldnt be deleted")
       }

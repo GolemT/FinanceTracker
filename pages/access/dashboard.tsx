@@ -5,11 +5,13 @@ import styles from '../../styles/main.module.css'
 import { checkAuth } from '../../app/checkAuth';
 import { useEffect, useState } from 'react';
 import { CircularProgress } from '@mui/material';
+import Transaction from 'components/interfaces/transactions';
+import Tag from 'components/interfaces/tags'
  
 const dashboard = ({ user }) => {
 
-  const [transactions, setTransactions] = useState([]);
-  const [tags, setTags] = useState([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -39,18 +41,18 @@ const dashboard = ({ user }) => {
       { isLoading ? (
         <CircularProgress />
       ): (
-      <content className={styles.content}>
-        <cards className={styles.grid}>
+      <div id="content" className={styles.content}>
+        <div id='cards' className={styles.grid}>
           <div className={styles.card}>
             <h3>Overview</h3>
-            <StockChart transactions={transactions}/>
+            <StockChart transactions={transactions} tags={tags}/>
           </div>
           <div className={styles.card}>
             <h3>Based on Tags</h3>
             <PieChart transactions={transactions} tags={tags}/>
           </div>
-        </cards> 
-      </content>
+        </div> 
+      </div>
     )}
     </Layout>
   );

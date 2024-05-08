@@ -1,26 +1,32 @@
 import Layout from '../../components/Layout';
 import React, {useEffect, useState} from 'react'
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import styles from '../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import IconButton from '@mui/material/IconButton';
-import { CircularProgress } from '@mui/material';
+import { AlertColor, CircularProgress } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from '../../app/checkAuth';
+import Transaction from 'components/interfaces/transactions';
+import { ObjectId } from 'mongodb';
 
  
 const list = ({ user }) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // Kann 'success', 'error', 'warning', 'info' sein
+  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success'); // Kann 'success', 'error', 'warning', 'info' sein
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [animationClass, setAnimationClass] = useState(styles.animateButtons)
 
-  const handleSnackbarClose = (event, reason) => {
+  const handleSnackbarClose = (
+    event: Event | React.SyntheticEvent<any, Event>, 
+    reason: string
+  ) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -58,7 +64,7 @@ const list = ({ user }) => {
         fetchData();
     }, []);
 
-    const columns = [
+    const columns: GridColDef[] = [
       { field: 'name', headerName: 'Name', flex: 1 },
       { field: 'date', headerName: 'Date', flex: 1 },
       { field: 'tags', headerName: 'Tags', flex: 2 },
@@ -84,17 +90,10 @@ const list = ({ user }) => {
       router.push('/access/add')
   }
 
-  const animationClass = selectedRows.length > 0 ? styles.animateButtons : styles.none;
-
   const handleDeleteConfirm = async () => {
-    const namesToDelete = selectedRows.map(rowId => {
-      const row = data.find(item => item.id === rowId);
-      return row ? row.name : null;
-    }).filter(name => name !== null); // Entfernen Sie null Werte, falls welche existieren
-
-  if (namesToDelete.length === 0) {
-      console.error("No valid names to delete");
-      setSnackbarMessage('No valid transactions selected.');
+  if (selectedRows.length === 0) {
+      console.error("No transactions selected for deletion");
+      setSnackbarMessage('No valid transactions selected for deletion.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
       return;
@@ -107,7 +106,7 @@ const list = ({ user }) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            names: namesToDelete,
+            ids: selectedRows,
             user: user.nickname
           })
         });
@@ -123,26 +122,33 @@ const list = ({ user }) => {
       } catch (error) {
         setSnackbarMessage(error.message  || 'Failed to delete transactions');
         setSnackbarSeverity('error');
+      } finally {
+        setDialogOpen(false);
+        setSnackbarOpen(true);
       }
-      setDialogOpen(false);
-      setSnackbarOpen(true);
       }
 
     const handleDelete = () => {
       setDialogOpen(true);
     }
+
+    const handleRowSelectionChange = (newSelectionModel: GridRowId[]) => {
+
+      setSelectedRows(newSelectionModel as string[]);
+  
+      newSelectionModel.length > 0 ? setAnimationClass(styles.animateButtons) : setAnimationClass(styles.none);
+  };
   
   return (
     <Layout>
-        <content className={styles.content}>
+        <div id="content" className={styles.content}>
           { isLoading ? (
             <CircularProgress />
           ): (
-          <div style={{ height: '100%', width: '100%', backgroundcolor: '#FAFAFA' }}>
+          <div style={{ height: '100%', width: '100%', backgroundColor: '#FAFAFA' }}>
             <DataGrid
               rows={data}
               columns={columns}
-              pageSize={10}
               checkboxSelection
               sortModel={[
                 {
@@ -150,10 +156,7 @@ const list = ({ user }) => {
                   sort: 'desc',
                 },
               ]}
-              onRowSelectionModelChange={(newSelection) => {
-                setSelectedRows(newSelection)
-                console.log(selectedRows)
-              }}
+              onRowSelectionModelChange={handleRowSelectionChange}
             />
           </div>
           )}
@@ -192,12 +195,19 @@ const list = ({ user }) => {
               </Button>
             </DialogActions>
           </Dialog>
-          <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
-          <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-            {snackbarMessage}
-          </Alert>
-          </Snackbar>
-        </content>
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            onClose={handleSnackbarClose} // using corrected function here
+            >
+            <Alert
+                severity={snackbarSeverity}
+                sx={{ width: '100%' }}
+            >
+    {snackbarMessage}
+  </Alert>
+</Snackbar>
+        </div>
     </Layout>
   );
 }

@@ -1,8 +1,8 @@
-import Layout from "../../components/Layout";
+import Layout from "../../../components/Layout";
 import styles from '../../styles/main.module.css'
-import { checkAuth } from "../../app/checkAuth";
+import { checkAuth } from "../../../app/checkAuth";
 
-const analytics = ({ user }) => {
+const support = ({ user }) => {
     return (
         <Layout>
             <content className={styles.content}>
@@ -14,4 +14,4 @@ const analytics = ({ user }) => {
 
 export const getServerSideProps = checkAuth();
 
-export default analytics;
+export default support;

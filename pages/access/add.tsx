@@ -11,8 +11,8 @@ import IconButton from '@mui/material/IconButton';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs from 'dayjs'
-import styles from '../../styles/main.module.css'
+import dayjs from 'dayjs';
+import styles from 'styles/main.module.css';
 import { checkAuth } from '../../app/checkAuth';
 import { CircularProgress } from '@mui/material';
  
@@ -25,7 +25,7 @@ const add = ({ user }) => {
     // Formatiere das aktuelle Datum im YYYY-MM-DD Format für das input[type='date']
     // new Date().toISOString().split('T')[0]
     const [date, setDate] = useState(dayjs());
-    const [message, setMessage] = useState(undefined);
+    const [message, setMessage] = useState("");
     const router = useRouter();
 
     const ITEM_HEIGHT = 48;
@@ -54,7 +54,7 @@ const add = ({ user }) => {
             }
         } catch (error) {
             console.error('Error fetching tags:', error);
-            setMessage('Failed to load tags');
+            setMessage("Failed to load tags");
         } finally {
           setIsLoading(false);
         }
@@ -129,7 +129,7 @@ const add = ({ user }) => {
       { isLoading ? (
         <CircularProgress />
       ): (
-          <content className={styles.content}>
+          <div id="content" className={styles.content}>
           <h3>Add a new Transaction</h3>
           <h4 className={styles.warning}>{message}</h4>
           <FormControl margin="normal" sx={{ m: 1, width: '100%', '& > :not(style)': { m:1 }, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
@@ -146,15 +146,15 @@ const add = ({ user }) => {
             />
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker 
-                  label="Transaction Date"
-                  value={date}
-                  sx={{ minWidth: 300 }}
-                  onChange={(newValue) => {
+                <DatePicker
+                label="Transaction Date"
+                value={date}
+                onChange={(newValue) => {
+                    if (newValue) {
                     setDate(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} margin='normal' required />}
-                  />
+                    }
+                }}
+                />
             </LocalizationProvider>
 
             <FormControl sx={{ minWidth: 300, margin: 'normal' }}>
@@ -192,7 +192,7 @@ const add = ({ user }) => {
           />
             <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.svg"/></IconButton>
           </FormControl>
-        </content>
+        </div>
       )}
     </Layout>
   );

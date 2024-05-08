@@ -1,25 +1,30 @@
 import Layout from "../../components/Layout";
 import React, {useState, useEffect} from "react";
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridRowId } from '@mui/x-data-grid';
 import styles from '../../styles/main.module.css';
 import { useRouter } from 'next/router';
 import IconButton from '@mui/material/IconButton';
-import { CircularProgress } from '@mui/material';
+import { AlertColor, CircularProgress } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from "../../app/checkAuth";
+import Tag from "components/interfaces/tags";
 
 const tags = ({ user }) => {
-    const [tags, setTags] = useState({});
+    const [tags, setTags] = useState<Tag[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-    const [selectedTagKeys, setSelectedTagKeys] = useState([]);
+    const [selectedTagKeys, setSelectedTagKeys] = useState<string[]>([]);
+    const [animationClass, setAnimationClass] = useState(styles.none);
 
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // Kann 'success', 'error', 'warning', 'info' sein
+    const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success'); // Kann 'success', 'error', 'warning', 'info' sein
     const [dialogOpen, setDialogOpen] = useState(false);
   
-    const handleSnackbarClose = (event, reason) => {
+    const handleSnackbarClose = (
+        event: Event | React.SyntheticEvent<any, Event>, 
+        reason: string
+      ) => {
       if (reason === 'clickaway') {
         return;
       }
@@ -33,7 +38,7 @@ const tags = ({ user }) => {
           if (response.ok) {
               const loadedTags = await response.json();
               const tagsArray = loadedTags.map((tag, index) => ({
-                  id: index, // Eindeutige ID, falls die Tags keine eigene ID haben
+                  id: tag.name, // Eindeutige ID, falls die Tags keine eigene ID haben
                   tag: tag.name, // Name des Tags
                   description: tag.desc, // Beschreibung des Tags
               }));
@@ -61,8 +66,6 @@ const tags = ({ user }) => {
     { field: 'description', headerName: 'Description', flex: 3 },
   ];
 
-  const animationClass = selectedTagKeys.length > 0 ? styles.animateButtons : styles.none;
-
   const handleDeleteConfirm = async () => {
     try {
       const response = await fetch('/api/v1/tags/delete', {
@@ -88,6 +91,16 @@ const tags = ({ user }) => {
   }
 };
   
+const handleRowSelectionChange = (newSelectionModel: GridRowId[]) => {
+  const newSelectedTagKeys = newSelectionModel.map(id => String(id));
+
+  setSelectedTagKeys(newSelectedTagKeys);
+
+  // Toggle the visibility of delete button based on selection.
+  newSelectedTagKeys.length > 0 ? setAnimationClass(styles.animateButtons) : setAnimationClass(styles.none);
+};
+
+  
 
     const addTag = () => {
         router.push('/access/addTags')
@@ -99,34 +112,27 @@ const tags = ({ user }) => {
 
     return (
         <Layout>
-            <content className={styles.content}>
+            <div id="content" className={styles.content}>
               {isLoading ? (
                 <CircularProgress />
               ): (
-                <div style={{ height: '100%', width: '100%', backgroundcolor: '#FAFAFA' }}>
+                <div style={{ height: '100%', width: '100%', backgroundColor: '#FAFAFA' }}>
                     <DataGrid
                         rows={tags}
                         columns={columns}
-                        pageSize={1}
                         checkboxSelection
-                        onRowSelectionModelChange={(newSelectionModel) => {
-                            const newSelectedTagKeys = newSelectionModel.map(
-                              (id) => tags.find((tag) => tag.id === id)?.tag
-                            );
-                            setSelectedTagKeys(newSelectedTagKeys);
-                          }}
+                        onRowSelectionModelChange={handleRowSelectionChange}
                     />
+
                 </div>
                 )}
                 <div className={styles.buttons}>
                     <div className={animationClass}>
-                        {selectedTagKeys.length > 0 && (
                         <>
                             <IconButton aria-label="delete" size="medium" color="secondary" onClick={handleDelete}>
                             <img src="/delete.svg"/>
                             </IconButton>
                         </>
-                        )}
                     </div>
                     <IconButton aria-label="add" size="medium" color="primary" onClick={addTag} className={styles.icon}>
                     <img src="/Add_button.svg"/>
@@ -154,11 +160,11 @@ const tags = ({ user }) => {
                   </DialogActions>
                 </Dialog>
                 <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
-                <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+                <Alert severity={snackbarSeverity} sx={{ width: '100%' }}>
                   {snackbarMessage}
                 </Alert>
                 </Snackbar>
-            </content>
+            </div>
     </Layout>
     )
 }
