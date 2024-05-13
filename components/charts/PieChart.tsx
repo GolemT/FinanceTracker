@@ -1,16 +1,13 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import Chart from 'chart.js/auto';
 import { CircularProgress } from '@mui/material';
-import Transaction from 'components/interfaces/transactions';
-import Tag from 'components/interfaces/tags';
-import GraphData from 'components/interfaces/GraphData'; 
+import MyChartProps from 'components/interfaces/MyChartProps';
+import GraphData from 'components/interfaces/GraphData';
+import { Transactions, Tags } from 'app/getContext';
 
-interface MyChartProps {
-    transactions: Transaction[];
-    tags: Tag[]
-}
-
-const MyChart: React.FC<MyChartProps> = ({ transactions, tags }) => {  // Vergewissern Sie sich, dass `user` als Prop übergeben wird
+const MyChart: React.FC = () => {  // Vergewissern Sie sich, dass `user` als Prop übergeben wird
+  const tags = useContext(Tags);
+  const transactions = useContext(Transactions)
   const chartRef = useRef<HTMLCanvasElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [graphData, setGraphData] = useState<GraphData>({
@@ -20,7 +17,6 @@ const MyChart: React.FC<MyChartProps> = ({ transactions, tags }) => {  // Vergew
 
   const fetchData = async () => {
     setIsLoading(true);
-
 
         const tagsArray = tags.map(tag => tag.name);
         const sumsByTag = tagsArray.reduce((acc, tag) => {

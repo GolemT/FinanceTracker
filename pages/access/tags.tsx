@@ -1,17 +1,16 @@
 import Layout from "../../components/Layout";
-import React, {useState, useEffect} from "react";
+import React, {useState, useContext} from "react";
 import { DataGrid, GridRowId } from '@mui/x-data-grid';
 import styles from '../../styles/main.module.css';
 import { useRouter } from 'next/router';
 import IconButton from '@mui/material/IconButton';
-import { AlertColor, CircularProgress } from '@mui/material';
+import { AlertColor } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from "../../app/checkAuth";
-import Tag from "components/interfaces/tags";
+import getContext, { Tags } from "app/getContext";
 
 const tags = ({ user }) => {
-    const [tags, setTags] = useState<Tag[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const tags = useContext(Tags)
     const router = useRouter();
     const [selectedTagKeys, setSelectedTagKeys] = useState<string[]>([]);
     const [animationClass, setAnimationClass] = useState(styles.none);
@@ -31,36 +30,6 @@ const tags = ({ user }) => {
       setSnackbarOpen(false);
     };
 
-    const fetchTags = async () => {
-      setIsLoading(true);
-      try {
-          const response = await fetch(`/api/v1/tags/${user.nickname}`);
-          if (response.ok) {
-              const loadedTags = await response.json();
-              const tagsArray = loadedTags.map((tag, index) => ({
-                  id: tag.name, // Eindeutige ID, falls die Tags keine eigene ID haben
-                  tag: tag.name, // Name des Tags
-                  description: tag.desc, // Beschreibung des Tags
-              }));
-              setTags(tagsArray);
-          } else {
-              throw new Error('Failed to fetch tags');
-          }
-        } catch (error) {
-          console.error('Error fetching tags:', error);
-          setSnackbarMessage('Error fetching tags.');
-          setSnackbarSeverity('error');
-          setSnackbarOpen(true);
-      } finally {
-        setIsLoading(false); // Beende das Laden
-      }
-  };
-  
-
-    useEffect(() => {
-      fetchTags();
-  }, []);
-
   const columns = [
     { field: 'tag', headerName: 'Tag', flex: 1 },
     { field: 'description', headerName: 'Description', flex: 3 },
@@ -76,7 +45,7 @@ const tags = ({ user }) => {
       if (response.ok) {
           setSnackbarMessage('Tags successfully deleted');
           setSnackbarSeverity('success');
-          fetchTags(); // Re-fetch tags to update the list
+          getContext(user); // Re-fetch tags to update the list
       } else {
           throw new Error('Failed to delete tags');
       }
@@ -87,7 +56,6 @@ const tags = ({ user }) => {
   } finally {
       setDialogOpen(false);
       setSnackbarOpen(true);
-      setIsLoading(false);
   }
 };
   
@@ -113,9 +81,6 @@ const handleRowSelectionChange = (newSelectionModel: GridRowId[]) => {
     return (
         <Layout>
             <div id="content" className={styles.content}>
-              {isLoading ? (
-                <CircularProgress />
-              ): (
                 <div style={{ height: '100%', width: '100%', backgroundColor: '#FAFAFA' }}>
                     <DataGrid
                         rows={tags}
@@ -125,7 +90,6 @@ const handleRowSelectionChange = (newSelectionModel: GridRowId[]) => {
                     />
 
                 </div>
-                )}
                 <div className={styles.buttons}>
                     <div className={animationClass}>
                         <>

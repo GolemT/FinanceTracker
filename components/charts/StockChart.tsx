@@ -1,11 +1,13 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import Chart from 'chart.js/auto';
 import { CircularProgress } from '@mui/material';
 import GraphData from 'components/interfaces/GraphData';
 import Transaction from 'components/interfaces/transactions';
 import MyChartProps from 'components/interfaces/MyChartProps';
+import { Transactions } from 'app/getContext';
 
-const MyChart: React.FC<MyChartProps> = ({ transactions }) => {
+const MyChart: React.FC = () => {
+  const transactions = useContext(Transactions)
   const chartRef = useRef<HTMLCanvasElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [graphData, setGraphData] = useState<GraphData>({

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,14 +14,13 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import styles from 'styles/main.module.css';
 import { checkAuth } from '../../app/checkAuth';
-import { CircularProgress } from '@mui/material';
+import getContext, { Tags } from 'app/getContext';
  
 const add = ({ user }) => {
     const [name, setName] = useState('');
     const [amount, setAmount] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
-    const [availableTags, setAvailableTags] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const availableTags = useContext(Tags).map(tag => tag.name);
     // Formatiere das aktuelle Datum im YYYY-MM-DD Format für das input[type='date']
     // new Date().toISOString().split('T')[0]
     const [date, setDate] = useState(dayjs());
@@ -39,29 +38,6 @@ const add = ({ user }) => {
       },
     },
   };
-    
-
-    useEffect(() => {
-      const fetchTags = async () => {
-        setIsLoading(true);
-        try {
-            const response = await fetch(`/api/v1/tags/${user.nickname}`);
-            const data = await response.json();
-            if (response.ok) {
-                setAvailableTags(data.map(tag => tag.name));
-            } else {
-                throw new Error('Failed to fetch tags');
-            }
-        } catch (error) {
-            console.error('Error fetching tags:', error);
-            setMessage("Failed to load tags");
-        } finally {
-          setIsLoading(false);
-        }
-    };
-
-    fetchTags();
-}, []);
 
   function getStyles(name, personName, theme) {
     return {
@@ -113,6 +89,7 @@ const add = ({ user }) => {
         
           const result = await response.json();
           if (response.ok) {
+            getContext(user);
             router.push('/access/list');
         } else {
             throw new Error(result.message || 'Failed to add transaction');
@@ -125,10 +102,6 @@ const add = ({ user }) => {
 
   return (
     <Layout>
-      
-      { isLoading ? (
-        <CircularProgress />
-      ): (
           <div id="content" className={styles.content}>
           <h3>Add a new Transaction</h3>
           <h4 className={styles.warning}>{message}</h4>
@@ -193,7 +166,6 @@ const add = ({ user }) => {
             <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.svg"/></IconButton>
           </FormControl>
         </div>
-      )}
     </Layout>
   );
 }

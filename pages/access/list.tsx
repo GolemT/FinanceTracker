@@ -1,19 +1,17 @@
 import Layout from '../../components/Layout';
-import React, {useEffect, useState} from 'react'
+import React, { useState, useContext} from 'react'
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import styles from '../../styles/main.module.css'
 import { useRouter } from 'next/router'
 import IconButton from '@mui/material/IconButton';
-import { AlertColor, CircularProgress } from '@mui/material';
+import { AlertColor } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from '../../app/checkAuth';
-import Transaction from 'components/interfaces/transactions';
-import { ObjectId } from 'mongodb';
+import getContext, { Transactions } from 'app/getContext';
 
  
 const list = ({ user }) => {
-  const [data, setData] = useState<Transaction[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const data = useContext(Transactions);
   const router = useRouter();
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
@@ -32,37 +30,6 @@ const list = ({ user }) => {
     }
     setSnackbarOpen(false);
   };
-
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/v1/transactions/${user.nickname}`);
-      if (response.ok) {
-        const loadedData = await response.json();
-        const dataArray = loadedData.map(item => ({
-          id: item._id, // MongoDB IDs are stored under _id
-          name: item.name,
-          date: item.date,
-          tags: item.tags.join(", "), // Assuming tags is an array
-          amount: item.amount
-        }));
-        setData(dataArray);
-      } else {
-        throw new Error('Failed to fetch data');
-      }
-    } catch (error) {
-      console.error('Error fetching transactions:', error);
-      setSnackbarMessage('Error fetching data.');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
-    } finally {
-      setIsLoading(false)
-    }
-  };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     const columns: GridColDef[] = [
       { field: 'name', headerName: 'Name', flex: 1 },
@@ -113,7 +80,7 @@ const list = ({ user }) => {
 
         const result = await response.json();
         if(response.ok) {
-          fetchData()
+          getContext(user);
           setSnackbarMessage('Data was deleted successfully.');
           setSnackbarSeverity('success');
         } else {
@@ -142,9 +109,6 @@ const list = ({ user }) => {
   return (
     <Layout>
         <div id="content" className={styles.content}>
-          { isLoading ? (
-            <CircularProgress />
-          ): (
           <div style={{ height: '100%', width: '100%', backgroundColor: '#FAFAFA' }}>
             <DataGrid
               rows={data}
@@ -159,7 +123,6 @@ const list = ({ user }) => {
               onRowSelectionModelChange={handleRowSelectionChange}
             />
           </div>
-          )}
           <div className={styles.buttons}>
           <div className={animationClass}>
             {selectedRows.length > 0 && (

@@ -9,7 +9,7 @@ import styles from '../styles/layout.module.css'
 const Layout = ({ children }) => {    
 
     return (
-        <div>
+        <>
             <SpeedInsights />
             <Head>
                 <title>FinanceTracker</title>
@@ -99,7 +99,7 @@ const Layout = ({ children }) => {
                 box-sizing: border-box;
                 }
             `}</style>
-        </div>
+        </>
     );
 };
 
