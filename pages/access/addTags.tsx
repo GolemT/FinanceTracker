@@ -4,16 +4,17 @@ import { useRouter } from 'next/router';
 import { FormControl, TextField, IconButton } from '@mui/material';
 import styles from '../../styles/main.module.css'
 import { checkAuth } from '../../app/checkAuth';
-import getContext, { Tags } from 'app/getContext';
+import {fetchDataAndUpdateContext, useDataContext} from 'app/getContext';
 
 const addTags = ({ user }) => {
     const [name, setName] = useState("");
     const [description, setDescription] = useState('');
     const [message, setMessage] = useState("");
-    const availableTags = useContext(Tags).map(tag => tag.name.toLowerCase());
+    const {transactions, setTransactions, tags, setTags } = useDataContext();
+    const availableTags = tags.map(tag => tag.name.toLowerCase());
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
 
         const formattedName = name.toLowerCase();
@@ -40,7 +41,7 @@ const addTags = ({ user }) => {
           });
           const result = await response.json();
           if (response.ok) {
-            getContext(user)
+            await fetchDataAndUpdateContext(user, setTransactions, setTags)
             router.push('/access/tags');
         } else {
             throw new Error(result.message || 'Failed to add Tag');
@@ -77,7 +78,9 @@ const addTags = ({ user }) => {
               onChange={(e) => setDescription(e.target.value)}
               />
 
-              <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.svg"/></IconButton>
+              <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}>
+                  <img src="/Add_button.svg" alt={"add"}/>
+              </IconButton>
             </FormControl>
           </div>
         </Layout>

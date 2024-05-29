@@ -1,5 +1,4 @@
 import { getSession } from "@auth0/nextjs-auth0";
-import getContext from "./getContext";
 
 export function checkAuth(gssp?: (context: any, user: any) => Promise<any>) {
     return async (context) => {
@@ -13,7 +12,6 @@ export function checkAuth(gssp?: (context: any, user: any) => Promise<any>) {
                 },
             };
         }
-        getContext(session.user);
 
         const result = gssp ? await gssp(context, session.user) : { props: { user: session.user } };
         return result;

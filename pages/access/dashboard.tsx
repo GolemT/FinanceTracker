@@ -3,11 +3,20 @@ import StockChart from '../../components/charts/StockChart';
 import PieChart from '../../components/charts/PieChart';
 import styles from '../../styles/main.module.css'
 import { checkAuth } from '../../app/checkAuth';
-import { useEffect, useState, useContext } from 'react';
-import { CircularProgress } from '@mui/material';
+import {fetchDataAndUpdateContext, useDataContext} from "../../app/getContext";
+import {useEffect} from "react";
  
 const dashboard = ({ user }) => {
-  
+  const {transactions, setTransactions, tags, setTags } = useDataContext();
+
+  const checkForContext = async () => {
+    if (transactions.length === 0 || tags.length === 0){
+      await fetchDataAndUpdateContext(user, setTransactions, setTags);
+    }
+  }
+
+  useEffect(() => { checkForContext()}, []);
+
   return (
     <Layout>
       <div id="content" className={styles.content}>

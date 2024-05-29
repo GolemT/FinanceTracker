@@ -3,11 +3,10 @@ import Chart from 'chart.js/auto';
 import { CircularProgress } from '@mui/material';
 import MyChartProps from 'components/interfaces/MyChartProps';
 import GraphData from 'components/interfaces/GraphData';
-import { Transactions, Tags } from 'app/getContext';
+import {useDataContext} from "../../app/getContext";
 
 const MyChart: React.FC = () => {  // Vergewissern Sie sich, dass `user` als Prop übergeben wird
-  const tags = useContext(Tags);
-  const transactions = useContext(Transactions)
+  const {transactions, setTransactions, tags, setTags } = useDataContext();
   const chartRef = useRef<HTMLCanvasElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [graphData, setGraphData] = useState<GraphData>({

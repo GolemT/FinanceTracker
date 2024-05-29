@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,13 +14,14 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import styles from 'styles/main.module.css';
 import { checkAuth } from '../../app/checkAuth';
-import getContext, { Tags } from 'app/getContext';
+import {fetchDataAndUpdateContext, useDataContext} from "../../app/getContext";
  
 const add = ({ user }) => {
     const [name, setName] = useState('');
     const [amount, setAmount] = useState('');
+    const {setTransactions, tags, setTags } = useDataContext();
     const [selectedTags, setSelectedTags] = useState([]);
-    const availableTags = useContext(Tags).map(tag => tag.name);
+    const availableTags = tags.map(tag => tag.name);
     // Formatiere das aktuelle Datum im YYYY-MM-DD Format für das input[type='date']
     // new Date().toISOString().split('T')[0]
     const [date, setDate] = useState(dayjs());
@@ -89,8 +90,8 @@ const add = ({ user }) => {
         
           const result = await response.json();
           if (response.ok) {
-            getContext(user);
-            router.push('/access/list');
+            await fetchDataAndUpdateContext(user, setTransactions, setTags);
+            await router.push('/access/list');
         } else {
             throw new Error(result.message || 'Failed to add transaction');
         }
@@ -163,7 +164,9 @@ const add = ({ user }) => {
             margin="normal"
             variant="outlined"
           />
-            <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}><img src="/Add_button.svg"/></IconButton>
+            <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}>
+                <img src="/Add_button.svg" alt={"add"}/>
+            </IconButton>
           </FormControl>
         </div>
     </Layout>

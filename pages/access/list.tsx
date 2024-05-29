@@ -7,11 +7,11 @@ import IconButton from '@mui/material/IconButton';
 import { AlertColor } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from '../../app/checkAuth';
-import getContext, { Transactions } from 'app/getContext';
+import {fetchDataAndUpdateContext, useDataContext} from 'app/getContext';
 
  
 const list = ({ user }) => {
-  const data = useContext(Transactions);
+  const {transactions, setTransactions, setTags } = useDataContext();
   const router = useRouter();
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
@@ -80,7 +80,7 @@ const list = ({ user }) => {
 
         const result = await response.json();
         if(response.ok) {
-          getContext(user);
+          await fetchDataAndUpdateContext(user, setTransactions, setTags);
           setSnackbarMessage('Data was deleted successfully.');
           setSnackbarSeverity('success');
         } else {
@@ -111,7 +111,7 @@ const list = ({ user }) => {
         <div id="content" className={styles.content}>
           <div style={{ height: '100%', width: '100%', backgroundColor: '#FAFAFA' }}>
             <DataGrid
-              rows={data}
+              rows={transactions}
               columns={columns}
               checkboxSelection
               sortModel={[
@@ -121,6 +121,7 @@ const list = ({ user }) => {
                 },
               ]}
               onRowSelectionModelChange={handleRowSelectionChange}
+              getRowId={(row) => row._id}
             />
           </div>
           <div className={styles.buttons}>
@@ -128,13 +129,13 @@ const list = ({ user }) => {
             {selectedRows.length > 0 && (
               <>
                 <IconButton aria-label="delete" size="medium" color="secondary" onClick={handleDelete}>
-                  <img src="/delete.svg"/>
+                  <img src="/delete.svg" alt={"delete"}/>
                 </IconButton>
               </>
             )}
           </div>
             <IconButton aria-label="add" size="medium" color="primary" onClick={add} className={styles.icon}>
-              <img src="/Add_button.svg"/>
+              <img src="/Add_button.svg" alt={"add"}/>
               </IconButton>
           </div>
           <Dialog

@@ -6,7 +6,7 @@ import Sidemenu from './sidemenu'
 import Topbar from './topbar'
 import styles from '../styles/layout.module.css'
 
-const Layout = ({ children }) => {    
+const Layout = ({ children }) => {
 
     return (
         <>

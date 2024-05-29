@@ -7,10 +7,10 @@ import IconButton from '@mui/material/IconButton';
 import { AlertColor } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from "../../app/checkAuth";
-import getContext, { Tags } from "app/getContext";
+import {fetchDataAndUpdateContext, useDataContext} from "../../app/getContext";
 
 const tags = ({ user }) => {
-    const tags = useContext(Tags)
+    const {setTransactions, tags, setTags } = useDataContext();
     const router = useRouter();
     const [selectedTagKeys, setSelectedTagKeys] = useState<string[]>([]);
     const [animationClass, setAnimationClass] = useState(styles.none);
@@ -31,8 +31,8 @@ const tags = ({ user }) => {
     };
 
   const columns = [
-    { field: 'tag', headerName: 'Tag', flex: 1 },
-    { field: 'description', headerName: 'Description', flex: 3 },
+    { field: 'name', headerName: 'Tag', flex: 1 },
+    { field: 'desc', headerName: 'Description', flex: 3 },
   ];
 
   const handleDeleteConfirm = async () => {
@@ -40,12 +40,12 @@ const tags = ({ user }) => {
       const response = await fetch('/api/v1/tags/delete', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ names: selectedTagKeys, user: user.nickname })
+          body: JSON.stringify({ ids: selectedTagKeys, user: user.nickname })
       });
       if (response.ok) {
           setSnackbarMessage('Tags successfully deleted');
           setSnackbarSeverity('success');
-          getContext(user); // Re-fetch tags to update the list
+          fetchDataAndUpdateContext(user, setTransactions, setTags); // Re-fetch tags to update the list
       } else {
           throw new Error('Failed to delete tags');
       }
@@ -87,6 +87,7 @@ const handleRowSelectionChange = (newSelectionModel: GridRowId[]) => {
                         columns={columns}
                         checkboxSelection
                         onRowSelectionModelChange={handleRowSelectionChange}
+                        getRowId={(row:any) => row._id}
                     />
 
                 </div>

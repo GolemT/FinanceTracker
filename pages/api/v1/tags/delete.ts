@@ -1,13 +1,15 @@
 // Dateipfad: pages/api/tags/delete.js
 
 import client from '../../../../app/db';
+import { ObjectId } from 'mongodb';
 
 export default async function handler(req, res) {
   if (req.method === 'DELETE') {
     try {
-      const { names, user } = req.body;
+      console.log(req.body)
+      const { ids, user } = req.body;
 
-      if (!names || !user) {
+      if (!ids || !user) {
         return res.status(400).json({ message: 'Missing names or user information' });
       }
 
@@ -15,15 +17,17 @@ export default async function handler(req, res) {
       const database = client.db("FinanceTracker");
       const tags = database.collection("tags");
 
+      const objectIds = ids.map(id => new ObjectId(id));
+
       const result = await tags.deleteMany({ 
-        name: { $in: names},
+        _id: { $in: objectIds},
         user: user 
       });
       
-      if (result.deletedCount === names.length) {
+      if (result.deletedCount === ids.length) {
         res.status(200).json({ message: 'Tags deleted successfully' });
       } else {
-        throw new Error("Some transactions couldnt be deleted")
+        throw new Error("Some tags couldnt be deleted")
       }
     } catch (error) {
       console.error("Error accessing database:", error);
