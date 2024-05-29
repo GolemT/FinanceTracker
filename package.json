@@ -20,8 +20,6 @@
     "@mui/system": "^5.15.13",
     "@mui/x-data-grid": "^6.19.6",
     "@mui/x-date-pickers": "^6.19.9",
-    "@react-buddy/ide-toolbox-next": "^2.4.1",
-    "@react-buddy/palette-mui": "^5.0.1",
     "@vercel/analytics": "^1.1.1",
     "@vercel/speed-insights": "^1.0.1",
     "chart.js": "^4.4.2",

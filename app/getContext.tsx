@@ -2,8 +2,6 @@ import Tag from 'components/interfaces/tags';
 import Transaction from 'components/interfaces/transactions';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const baseUrl = process.env.AUTH0_BASE_URL
-
 interface UserContextProps {
     transactions: Transaction[];
     setTransactions: (transactions: Transaction[]) => void;
@@ -12,6 +10,8 @@ interface UserContextProps {
 }
 
 export const fetchDataAndUpdateContext = async (user, setTransactions, setTags) => {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    console.log(baseUrl)
     try {
         const transactionsResponse = await fetch(`${baseUrl}api/v1/transactions/${user.nickname}`);
         const transactionsData = await transactionsResponse.json();

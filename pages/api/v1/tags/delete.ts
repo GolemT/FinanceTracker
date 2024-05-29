@@ -6,7 +6,6 @@ import { ObjectId } from 'mongodb';
 export default async function handler(req, res) {
   if (req.method === 'DELETE') {
     try {
-      console.log(req.body)
       const { ids, user } = req.body;
 
       if (!ids || !user) {
