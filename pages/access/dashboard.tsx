@@ -7,7 +7,7 @@ import {fetchDataAndUpdateContext, useDataContext} from "../../app/getContext";
 import {useEffect} from "react";
 import { useTheme } from 'app/ThemeContext';
  
-const dashboard = ({ user }) => {
+const Dashboard = ({ user }) => {
   const {themeMode} = useTheme()
   const {transactions, setTransactions, tags, setTags } = useDataContext();
 
@@ -39,4 +39,4 @@ const dashboard = ({ user }) => {
 
 export const getServerSideProps = checkAuth();
 
-export default dashboard;
+export default Dashboard;

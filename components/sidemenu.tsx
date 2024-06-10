@@ -12,9 +12,10 @@ export default function SideMenu() {
     };
 
     return (
-        <aside className={styles.sidemenu} style={{ backgroundColor: themeMode.sidebar}}>
+        <aside className={styles.sidemenu} style={{ backgroundColor: themeMode.sidebar, color: themeMode.text, borderRight: '1px solid grey'}}>
             <span className={styles.title} onClick={() => router.push('/access/dashboard')}>
-                <img src="/AppName.svg" />
+                <img src="/logo.svg" />
+                <h1>FinanceTracker</h1>
             </span>
             
             <nav className={styles.nav}>    

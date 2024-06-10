@@ -8,8 +8,10 @@ import { AlertColor } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from "../../app/checkAuth";
 import {fetchDataAndUpdateContext, useDataContext} from "../../app/getContext";
+import { useTheme } from "../../app/ThemeContext";
 
 const tags = ({ user }) => {
+    const {themeMode} = useTheme();
     const {setTransactions, tags, setTags } = useDataContext();
     const router = useRouter();
     const [selectedTagKeys, setSelectedTagKeys] = useState<string[]>([]);
@@ -80,10 +82,11 @@ const handleRowSelectionChange = (newSelectionModel: GridRowId[]) => {
 
     return (
         <Layout>
-            <div id="content" className={styles.content}>
-                <div style={{ height: '100%', width: '100%', backgroundColor: '#FAFAFA' }}>
+            <div id="content" className={styles.content} style={{ background: themeMode.body, color: themeMode.text}}>
+                <div style={{ height: '100%', width: '100%', backgroundColor: themeMode.background}}>
                     <DataGrid
                         rows={tags}
+                        style={{color: themeMode.text, backgroundColor: themeMode.background, border: 'none'}}
                         columns={columns}
                         checkboxSelection
                         onRowSelectionModelChange={handleRowSelectionChange}

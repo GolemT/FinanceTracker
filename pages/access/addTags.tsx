@@ -5,8 +5,10 @@ import { FormControl, TextField, IconButton } from '@mui/material';
 import styles from '../../styles/main.module.css'
 import { checkAuth } from '../../app/checkAuth';
 import {fetchDataAndUpdateContext, useDataContext} from 'app/getContext';
+import { useTheme } from 'app/ThemeContext';
 
 const addTags = ({ user }) => {
+    const {themeMode} = useTheme();
     const [name, setName] = useState("");
     const [description, setDescription] = useState('');
     const [message, setMessage] = useState("");
@@ -54,28 +56,40 @@ const addTags = ({ user }) => {
     
     return (
         <Layout>
-          <div id="content" className={styles.content}>
+          <div id="content" className={styles.content} style={{background: themeMode.body, color: themeMode.text}}>
             <h3>Add a new Tag</h3>
             <h4 className={styles.warning}>{message}</h4>
-            <FormControl sx={{ m: 1, width: 300 }}>
+            <FormControl sx={{ m: 1, width: 300}}>
 
               <TextField 
-              id="outlined-basic" 
               label="Name" 
-              variant="outlined" 
-              margin="normal" 
+              variant="filled" 
+              margin="normal"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
+              sx={{ 
+                input: {color: themeMode.text}, 
+                backgroundColor: themeMode.background, 
+                '& .MuiInputBase-input': { color: themeMode.text },
+                '& .MuiFilledInput-root': { backgroundColor: themeMode.background },
+                '& .MuiInputLabel-root': { color: themeMode.label }, 
+                '& .MuiOutlinedInput-notchedOutline': { borderColor: themeMode.toggleBorder }}}
               />
 
               <TextField 
-              id="outlined-basic" 
               label="Description"
-              variant="outlined" 
+              variant="filled"
               margin="normal" 
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              sx={{ 
+                input: {color: themeMode.text}, 
+                backgroundColor: themeMode.background,
+                '& .MuiInputBase-input': { color: themeMode.text },
+                '& .MuiFilledInput-root': { backgroundColor: themeMode.background },
+                '& .MuiInputLabel-root': { color: themeMode.label }, 
+                '& .MuiOutlinedInput-notchedOutline': { borderColor: themeMode.toggleBorder }}}
               />
 
               <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}>
