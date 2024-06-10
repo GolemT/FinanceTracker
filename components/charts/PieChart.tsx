@@ -1,11 +1,13 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import Chart from 'chart.js/auto';
 import { CircularProgress } from '@mui/material';
 import MyChartProps from 'components/interfaces/MyChartProps';
 import GraphData from 'components/interfaces/GraphData';
 import {useDataContext} from "../../app/getContext";
+import {useTheme} from "../../app/ThemeContext";
 
 const MyChart: React.FC = () => {  // Vergewissern Sie sich, dass `user` als Prop übergeben wird
+  const {themeMode} = useTheme()
   const {transactions, setTransactions, tags, setTags } = useDataContext();
   const chartRef = useRef<HTMLCanvasElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -13,6 +15,10 @@ const MyChart: React.FC = () => {  // Vergewissern Sie sich, dass `user` als Pro
     labels: [],
     dataPoints: []
   });
+
+
+  Chart.defaults.color = themeMode.text;
+
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -67,7 +73,8 @@ const MyChart: React.FC = () => {  // Vergewissern Sie sich, dass `user` als Pro
           borderColor: 'white'
         }]
       },
-      options: {}
+      options:{
+      }
     });
 
     return () => chart.destroy();

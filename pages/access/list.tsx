@@ -115,6 +115,7 @@ const list = ({ user }) => {
             <DataGrid
               rows={transactions}
               columns={columns}
+              style={{color: themeMode.text, backgroundColor: themeMode.background, border: 'none'}}
               checkboxSelection
               sortModel={[
                 {
@@ -124,6 +125,14 @@ const list = ({ user }) => {
               ]}
               onRowSelectionModelChange={handleRowSelectionChange}
               getRowId={(row) => row._id}
+              sx={{
+                '& .MuiCheckbox-root': {
+                  color: themeMode.text, // Passt die Farbe der Checkboxen an
+                },
+                '& .MuiCheckbox-colorPrimary.Mui-checked': {
+                  color: themeMode.blue, // Passt die Farbe der Checkboxen an, wenn sie ausgewählt sind
+                }
+              }}
             />
           </div>
           <div className={styles.buttons}>

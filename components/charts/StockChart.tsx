@@ -4,8 +4,10 @@ import { CircularProgress } from '@mui/material';
 import GraphData from 'components/interfaces/GraphData';
 import Transaction from 'components/interfaces/transactions';
 import { useDataContext } from 'app/getContext';
+import { useTheme } from 'app/ThemeContext';
 
 const MyChart: React.FC = () => {
+  const { themeMode } = useTheme();
   const {transactions } = useDataContext();
   const chartRef = useRef<HTMLCanvasElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +60,33 @@ const MyChart: React.FC = () => {
             }
           ]
         },
-        options: {}
+        options: {
+          plugins: {
+            legend: {
+              labels: {
+                color: themeMode.text, // Farbe der Legenden-Texte
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: themeMode.text // Farbe der X-Achsen-Texte
+              },
+              grid: {
+                color: themeMode.toggleBorder // Farbe der Gitterlinien
+              }
+            },
+            y: {
+              ticks: {
+                color: themeMode.text // Farbe der Y-Achsen-Texte
+              },
+              grid: {
+                color: themeMode.toggleBorder // Farbe der Gitterlinien
+              }
+            }
+          }
+        }
       });
   
       // Bereinigungsfunktion, um mehrfache Instanzen des Charts zu vermeiden
