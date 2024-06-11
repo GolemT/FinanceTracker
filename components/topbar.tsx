@@ -3,25 +3,26 @@ import { useRouter } from 'next/router';
 import React from 'react'
 import {RefreshButton} from "./RefreshButton";
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { useTheme } from '../app/ThemeContext'
+import SettingsButton from './SettingsButton';
+import ThemeButton from './ThemeButton';
 
-export default function topbar () {
+export default function TopBar () {
+    const {themeMode} = useTheme()
     const router = useRouter()
-    const { user, error, isLoading } = useUser();
+    const { user} = useUser();
 
     let pathName = router.pathname.split("/")[2];
     
     const pageName = pathName.replace(pathName.charAt(0), pathName.charAt(0).toUpperCase())
 
-    const loadSettings = () => {
-        router.push('/access/settings')
-    }
-
     return (
-        <header className={styles.header}>
-            <h2>{pageName}</h2>
+        <header className={styles.header} style={{ backgroundColor: themeMode.header, color: themeMode.text }}>
+            <h2 style={{flex:1}}>{pageName}</h2>
             <>
                 <RefreshButton user={user}/>
-                <img src="/settings.svg" onClick={loadSettings}/>
+                <ThemeButton />
+                <SettingsButton/>
             </>
         </header>
     )

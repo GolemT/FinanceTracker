@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import React, { useState } from 'react';
-import { useTheme } from '@mui/material/styles';
+import { useTheme as useMuiTheme} from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -15,8 +15,10 @@ import dayjs from 'dayjs';
 import styles from 'styles/main.module.css';
 import { checkAuth } from '../../app/checkAuth';
 import {fetchDataAndUpdateContext, useDataContext} from "../../app/getContext";
+import { useTheme } from 'app/ThemeContext';
  
 const add = ({ user }) => {
+    const { themeMode } = useTheme();
     const [name, setName] = useState('');
     const [amount, setAmount] = useState('');
     const {setTransactions, tags, setTags } = useDataContext();
@@ -51,7 +53,7 @@ const add = ({ user }) => {
 
 
 
-    const theme = useTheme();
+    const theme = useMuiTheme();
   
     const handleTagChange = (event) => {
       const {
@@ -103,20 +105,26 @@ const add = ({ user }) => {
 
   return (
     <Layout>
-          <div id="content" className={styles.content}>
+          <div id="content" className={styles.content} style={{background: themeMode.body, color: themeMode.text}}>
           <h3>Add a new Transaction</h3>
           <h4 className={styles.warning}>{message}</h4>
           <FormControl margin="normal" sx={{ m: 1, width: '100%', '& > :not(style)': { m:1 }, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
 
             <TextField 
-            id="outlined-basic" 
             label="Name" 
-            variant="outlined" 
+            variant="filled" 
             margin="normal" 
             required
-            sx={{ minWidth: 300 }}
             value={name}
             onChange={(e) => setName(e.target.value)}
+            sx={{
+              minWidth: 300,
+              input: {color: themeMode.text}, 
+              backgroundColor: themeMode.background, 
+              '& .MuiInputBase-input': { color: themeMode.text },
+              '& .MuiFilledInput-root': { backgroundColor: themeMode.background },
+              '& .MuiInputLabel-root': { color: themeMode.label }, 
+              '& .MuiOutlinedInput-notchedOutline': { borderColor: themeMode.toggleBorder }}}
             />
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -128,6 +136,13 @@ const add = ({ user }) => {
                     setDate(newValue);
                     }
                 }}
+                sx={{ 
+                  input: {color: themeMode.text}, 
+                  backgroundColor: themeMode.background, 
+                  '& .MuiInputBase-input': { color: themeMode.text },
+                  '& .MuiFilledInput-root': { backgroundColor: themeMode.background },
+                  '& .MuiInputLabel-root': { color: themeMode.label }, 
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: themeMode.toggleBorder }}}
                 />
             </LocalizationProvider>
 
@@ -137,10 +152,18 @@ const add = ({ user }) => {
                 labelId="tags-label"
                 id="tags-select"
                 multiple
+                variant="filled"
                 value={selectedTags}
                 onChange={handleTagChange}
                 input={<OutlinedInput label="Tag" />}
                 MenuProps={MenuProps}
+                sx={{ 
+                  input: {color: themeMode.text}, 
+                  backgroundColor: themeMode.background, 
+                  '& .MuiInputBase-input': { color: themeMode.text },
+                  '& .MuiFilledInput-root': { backgroundColor: themeMode.background },
+                  '& .MuiInputLabel-root': { color: themeMode.label }, 
+                  '& .MuiOutlinedInput-notchedOutline': { borderColor: themeMode.toggleBorder }}}
               >
               {availableTags.map((tag) => (
                 <MenuItem key={tag} value={tag} style={getStyles(tag, selectedTags, theme)}>
@@ -151,18 +174,24 @@ const add = ({ user }) => {
             </FormControl>
 
             <TextField
-            id="outlined-number"
             label="Amount"
             type="number"
             required
             value={amount}
-            sx={{ minWidth: 300 }}
             onChange={(e) => setAmount(e.target.value)}
             InputProps={{
               endAdornment: <InputAdornment position="end">€</InputAdornment>,
             }}
             margin="normal"
-            variant="outlined"
+            variant="filled"
+            sx={{
+              minWidth: 300,
+              input: {color: themeMode.text}, 
+              backgroundColor: themeMode.background, 
+              '& .MuiInputBase-input': { color: themeMode.text },
+              '& .MuiFilledInput-root': { backgroundColor: themeMode.background },
+              '& .MuiInputLabel-root': { color: themeMode.label }, 
+              '& .MuiOutlinedInput-notchedOutline': { borderColor: themeMode.toggleBorder }}}
           />
             <IconButton aria-label="add" size="large" color="primary" onClick={handleSubmit}>
                 <img src="/Add_button.svg" alt={"add"}/>

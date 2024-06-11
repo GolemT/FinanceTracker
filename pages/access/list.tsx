@@ -8,9 +8,11 @@ import { AlertColor } from '@mui/material';
 import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { checkAuth } from '../../app/checkAuth';
 import {fetchDataAndUpdateContext, useDataContext} from 'app/getContext';
+import { useTheme } from 'app/ThemeContext';
 
  
 const list = ({ user }) => {
+  const {themeMode} = useTheme()
   const {transactions, setTransactions, setTags } = useDataContext();
   const router = useRouter();
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
@@ -108,11 +110,12 @@ const list = ({ user }) => {
   
   return (
     <Layout>
-        <div id="content" className={styles.content}>
-          <div style={{ height: '100%', width: '100%', backgroundColor: '#FAFAFA' }}>
+        <div id="content" className={styles.content} style={{ backgroundColor: themeMode.body}}>
+          <div style={{ height: '100%', width: '100%', backgroundColor: themeMode.background, color: themeMode.text }}>
             <DataGrid
               rows={transactions}
               columns={columns}
+              style={{color: themeMode.text, backgroundColor: themeMode.background, border: 'none'}}
               checkboxSelection
               sortModel={[
                 {
@@ -122,6 +125,14 @@ const list = ({ user }) => {
               ]}
               onRowSelectionModelChange={handleRowSelectionChange}
               getRowId={(row) => row._id}
+              sx={{
+                '& .MuiCheckbox-root': {
+                  color: themeMode.text, // Passt die Farbe der Checkboxen an
+                },
+                '& .MuiCheckbox-colorPrimary.Mui-checked': {
+                  color: themeMode.blue, // Passt die Farbe der Checkboxen an, wenn sie ausgewählt sind
+                }
+              }}
             />
           </div>
           <div className={styles.buttons}>
