@@ -10,6 +10,7 @@ const MyChart: React.FC = () => {
   const { themeMode } = useTheme();
   const {transactions } = useDataContext();
   const chartRef = useRef<HTMLCanvasElement>(null);
+  const [chartInstance, setChartInstance] = useState<Chart|null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [graphData, setGraphData] = useState<GraphData>({
     labels: [],
@@ -43,11 +44,11 @@ const MyChart: React.FC = () => {
     }, [transactions]);
 
     useEffect(() => {
-        if(!chartRef.current) return;
-      const myChartRef = chartRef.current.getContext("2d");
+      if (!chartRef.current) return;
+      const context = chartRef.current.getContext("2d");
+      if (!context) return;
   
-    if(!myChartRef) return;
-      const chart = new Chart(myChartRef, {
+      const newChartInstance = new Chart(context, {
         type: "line",
         data: {
           labels: graphData.labels,
@@ -61,38 +62,48 @@ const MyChart: React.FC = () => {
           ]
         },
         options: {
+          responsive: true,
+          aspectRatio: 1,
           plugins: {
-            legend: {
-              labels: {
-                color: themeMode.text, // Farbe der Legenden-Texte
-              }
-            }
+            tooltip: {
+              bodyColor: themeMode.text,  // Anfangswert der Tooltip-Farbe
+            },
           },
           scales: {
             x: {
               ticks: {
-                color: themeMode.text // Farbe der X-Achsen-Texte
+                color: themeMode.text,  // Anfangswert der X-Achsen-Ticks-Farbe
               },
-              grid: {
-                color: themeMode.toggleBorder // Farbe der Gitterlinien
-              }
             },
             y: {
               ticks: {
-                color: themeMode.text // Farbe der Y-Achsen-Texte
+                color: themeMode.text,  // Anfangswert der Y-Achsen-Ticks-Farbe
               },
-              grid: {
-                color: themeMode.toggleBorder // Farbe der Gitterlinien
-              }
-            }
-          }
+            },
+          },
         }
       });
+      setChartInstance(newChartInstance);
   
-      // Bereinigungsfunktion, um mehrfache Instanzen des Charts zu vermeiden
-      return () => chart.destroy();
-  }, [graphData]); // Füge graphData als Abhängigkeit hinzu
-  
+      return () => {
+        newChartInstance.destroy();
+      };
+    }, [graphData]);
+
+      useEffect(() => {
+        if (!chartInstance) return;
+          // Update der Konfiguration mit neuen Farben
+          if (chartInstance.options.plugins?.tooltip) {
+            chartInstance.options.plugins.tooltip.bodyColor = themeMode.text;
+          }
+          if (chartInstance.options.scales?.x?.ticks) {
+            chartInstance.options.scales.x.ticks.color = themeMode.text;
+          }
+          if (chartInstance.options.scales?.y?.ticks) {
+            chartInstance.options.scales.y.ticks.color = themeMode.text;
+          }
+          chartInstance.update();
+      }, [themeMode]);  
 
   return (
     <div>
