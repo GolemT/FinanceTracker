@@ -9,7 +9,7 @@ export const lightTheme = {
     header: '#FCFCFC',  // Hintergrundfarbe der Kopfzeile
     sidebar: '#FBFBFB',  // Hintergrundfarbe der Seitenleiste, dunkel für Kontrast
     linkHover: '#623CEA',  // Hover-Farbe für Links
-    Label: '#070707',  // Dunkle Textfarbe für Labels
+    label: '#070707',  // Dunkle Textfarbe für Labels
   };
   
   
