@@ -19,8 +19,8 @@ export default async function handler(req, res) {
       const objectIds = ids.map(id => new ObjectId(id));
 
       const result = await transactions.deleteMany({
-        _id: { $in: objectIds },
-        user: user 
+        _id: { $in: { $eq: objectIds } },
+        user: { $eq: user } 
       });
       
       if (result.deletedCount === ids.length) {

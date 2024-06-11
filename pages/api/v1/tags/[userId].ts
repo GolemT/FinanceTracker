@@ -8,7 +8,7 @@ export default async function handler(req, res) {
       const database = client.db("FinanceTracker");
       const tags = database.collection("tags");
       
-      const results = await tags.find({ user: userId }).toArray();
+      const results = await tags.find({ user: {$eq: userId} }).toArray();
       
       res.status(200).json(results);
     } catch (error) {
