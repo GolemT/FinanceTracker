@@ -20,21 +20,21 @@ export default function SideMenu() {
             
             <nav className={styles.nav}>    
                 <Link href="/access/dashboard" passHref className={styles.Link}>
-                    <span style={getLinkStyle('/dashboard')}>Dashboard</span>
+                    <span style={getLinkStyle('/access/dashboard')}>Dashboard</span>
                 </Link>
                 <Link href="/access/list" passHref className={styles.Link}>
-                    <span style={getLinkStyle('/list')}>List</span>
+                    <span style={getLinkStyle('/access/list')}>List</span>
                 </Link>
                 <Link href="/access/analytics" passHref className={styles.Link}>
-                    <span style={getLinkStyle('/analytics')}>Analytics</span>
+                    <span style={getLinkStyle('/access/analytics')}>Analytics</span>
                 </Link>
                 <Link href="/access/tags" passHref className={styles.Link}>
-                    <span style={getLinkStyle('/tags')}>Tags</span>
+                    <span style={getLinkStyle('/access/tags')}>Tags</span>
                 </Link>
             </nav>
             <span className={styles.support}>
             <Link href="/access/support" passHref className={styles.Link}>
-                    <span style={getLinkStyle('/support')}>Support</span>
+                    <span style={getLinkStyle('/access/support')}>Support</span>
                 </Link>
             </span>
         </aside>
